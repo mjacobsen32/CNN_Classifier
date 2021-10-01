@@ -1,30 +1,32 @@
-# ------------ Libraries ------------
+from torch.utils import data
 from helper_functions.get_class_weights import get_class_weights
 from helper_functions.write_to_file import write_to_file
 import torch
 from torchvision import transforms
 from torch.utils.tensorboard import SummaryWriter
-import os, sys, datetime, time
+import os
+import sys
+import datetime
+import time
 from dataset_class import PhytoplanktonImageDataset
-from collections import Counter
 from train import train
 from validation import validation
-from helper_functions.get_args import get_args
 from helper_functions.print_image_processing import print_image_processing
 from helper_functions.get_model import get_model
 from helper_functions.get_optimizer import get_optimizer
 from helper_functions.get_loss_fn import get_loss_fn
 from helper_functions.get_lr_sched import get_lr_sched
-from helper_functions.tally_classes import tally_clases
+from helper_functions.tally_classes import tally_classes
 from constants import *
-from constants import output_file_name as out_file
+from constants import *
+import constants as c
 os.environ['CUDA_LAUNCH_BLOCKING'] = "1"
-''' Uncomment in conjunction with Google Colab for data access '''
 #!unzip "/content/gdrive/My Drive/Colab Notebooks/all_images/Phytoplankton_Images.zip" > /dev/null
 
 # ------------ Driver ------------
 def run(args):
-    out_file = str(datetime.datetime)
+    c.output_file_name = str(datetime.datetime)
+    c.tb_current_dir = c.tb_log_parent_dir + str(datetime.datetime)
     image_preprocessing = []
     output = ""
 
@@ -74,7 +76,7 @@ def run(args):
     test_loader = torch.utils.data.DataLoader(test_set, **test_kwargs)
 
     
-    writer = SummaryWriter('runs/phytoplankton2')
+    writer = SummaryWriter(c.tb_current_dir)
     
     model = get_model(model_name=args.model, num_classes=args.num_classes, device=device, dims=args.input_dimension)
     optimizer = get_optimizer(opt_name=args.optimizer, lr=args.lr, params=model.parameters(), weight_decay=args.gamma)
@@ -90,11 +92,12 @@ def run(args):
 
     start_time = time.clock()
     for epoch in range(1, args.epochs + 1):
-        mean_loss = train(args, model, device, train_loader, optimizer, epoch, loss_fn, target_count, running_loss, running_correct, writer)
-        validation(model, device, test_loader, loss_fn, actual_count, pred_count)
+        mean_loss = train(args, model, device, train_loader, optimizer, epoch, loss_fn, running_loss, running_correct, writer)
+        validation(model, device, test_loader, loss_fn, actual_count, pred_count, writer, epoch)
         scheduler.step(mean_loss)
         sys.stdout.flush()
         os.fsync(sys.stdout)
+        writer.add_scalar('learning_rate', scheduler.get_lr(), epoch)
     total_time = time.clock() - start_time
 
     output += "total training/validation time: {}".format(total_time)
@@ -102,6 +105,8 @@ def run(args):
     output += "train target: {}".format(target_count)
     output += "test count: {}".format(actual_count)
     output += "predicted count: {}".format(pred_count)
+
+    write_to_file(output)
 
     if args.save_model:
         torch.save(model.state_dict(), str(out_file) += "pt"))
