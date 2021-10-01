@@ -4,7 +4,7 @@ from helper_functions.write_to_file import write_to_file
 import torch
 from torchvision import transforms
 from torch.utils.tensorboard import SummaryWriter
-import os, sys, datetime
+import os, sys, datetime, time
 from dataset_class import PhytoplanktonImageDataset
 from collections import Counter
 from train import train
@@ -88,14 +88,17 @@ def run(args):
     write_to_file(output)
     output = ""
 
+    start_time = time.clock()
     for epoch in range(1, args.epochs + 1):
         mean_loss = train(args, model, device, train_loader, optimizer, epoch, loss_fn, target_count, running_loss, running_correct, writer)
         validation(model, device, test_loader, loss_fn, actual_count, pred_count)
         scheduler.step(mean_loss)
         sys.stdout.flush()
         os.fsync(sys.stdout)
+    total_time = time.clock() - start_time
 
-
+    output += "total training/validation time: {}".format(total_time)
+    output += "ms per image: {}".format(total_time / (train_length+test_length))
     output += "train target: {}".format(target_count)
     output += "test count: {}".format(actual_count)
     output += "predicted count: {}".format(pred_count)
