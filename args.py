@@ -3,6 +3,8 @@ class Args:
     subset_indices = int
     train_indices = int
     test_indices = int
+    train_length = int
+    test_length = int
     batch_size = int
     test_batch_size = int
     epochs = int

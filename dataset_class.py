@@ -9,9 +9,9 @@ import pandas as pd
 # ------------ Costum Dataset Class ------------
 class PhytoplanktonImageDataset(Dataset):
   def __init__(self, annotations_file, img_dir, transform, target_transform, num_classes, percent, dims):
-    self.img_labels = pd.read_csv(annotations_file) # Image name and label file loaded into img_labels
-    self.img_dir = img_dir # directory to find all image names
-    self.transform = transform # tranforms to apply to images
+    self.img_labels = pd.read_csv(annotations_file)  # Image name and label file loaded into img_labels
+    self.img_dir = img_dir  # directory to find all image names
+    self.transform = transform  # tranforms to apply to images
     self.target_transform = target_transform
     self.num_classes = num_classes
     self.percent = percent
@@ -32,7 +32,7 @@ class PhytoplanktonImageDataset(Dataset):
       else:
         label = 1
     if self.transform: # Transforms applied: Resize to 28 X 28, Normalize 
-      image = self.transform(image)
+        image = self.transform(image)
     if self.target_transform:
-      label = self.target_transform(label) # NONE
+        label = self.target_transform(label) # NONE
     return image, label

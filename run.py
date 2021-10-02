@@ -64,13 +64,11 @@ def run(args):
                                    percent = args.percent_data,
                                    dims = args.input_dimension)
 
-    train_length = int(len(ds)*.85)
-    test_length = len(ds) - train_length
+    output += "Train dataset length: {}\n".format(len(args.train_indices))
+    output += "Test dataset length: {}\n".format(len(args.test_indices))
 
-    output += "Train dataset length: {}\n".format(train_length))
-    output += "Test dataset length: {}\n".format(test_length)
-
-    train_set, test_set = torch.utils.data.random_split(ds, [train_length,test_length])
+    train_set = torch.utils.data.Subset(ds, args.train_indices)
+    test_set = torch.utils.data.Subset(ds, args.test_indices)
 
     train_loader = torch.utils.data.DataLoader(train_set,**train_kwargs)
     test_loader = torch.utils.data.DataLoader(test_set, **test_kwargs)
@@ -92,8 +90,12 @@ def run(args):
 
     start_time = time.clock()
     for epoch in range(1, args.epochs + 1):
-        mean_loss = train(args, model, device, train_loader, optimizer, epoch, loss_fn, running_loss, running_correct, writer)
-        validation(model, device, test_loader, loss_fn, actual_count, pred_count, writer, epoch)
+        mean_loss = train(args, model, device, 
+                          train_loader, optimizer, 
+                          epoch, loss_fn, running_loss,
+                          running_correct, writer)
+        validation(model, device, test_loader, loss_fn, 
+                   actual_count, pred_count, writer, epoch)
         scheduler.step(mean_loss)
         sys.stdout.flush()
         os.fsync(sys.stdout)
@@ -101,7 +103,9 @@ def run(args):
     total_time = time.clock() - start_time
 
     output += "total training/validation time: {}".format(total_time)
-    output += "ms per image: {}".format(total_time / (train_length+test_length))
+    output += "ms per image: {}".format(
+        total_time / (args.train_length+args.test_length)
+        )
     output += "train target: {}".format(target_count)
     output += "test count: {}".format(actual_count)
     output += "predicted count: {}".format(pred_count)
@@ -109,5 +113,5 @@ def run(args):
     write_to_file(output)
 
     if args.save_model:
-        torch.save(model.state_dict(), str(out_file) += "pt"))
+        torch.save(model.state_dict(), str(c.output_file_name) + ".pt")
     writer.close()
