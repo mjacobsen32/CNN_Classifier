@@ -23,3 +23,6 @@ class Args:
     dry_run = bool
     seed = int
     augmentations = []
+    class_weights = []
+    output_file_name = str
+    tb_dir = str

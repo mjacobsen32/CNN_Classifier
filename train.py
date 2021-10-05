@@ -1,7 +1,7 @@
-from helper_functions.write_to_file import write_to_file
+from helper_functions import write_to_file
 
 
-def train(args, model, device, train_loader, optimizer, epoch, loss_fn, running_loss, correct, writer):
+def train(args, model, device, train_loader, optimizer, epoch, loss_fn, running_loss, correct, writer, output_file):
     model.train() 
     losses = []
     for batch_idx, (data, target) in enumerate(train_loader):
@@ -19,8 +19,8 @@ def train(args, model, device, train_loader, optimizer, epoch, loss_fn, running_
 
         if batch_idx % args.log_interval == 0:
             calc_loss = 100. * batch_idx / len(train_loader), loss.item()
-            write_to_file('Train Epoch: {} [{}/{} ({:.0f}%)]\tLoss: {:.6f}'.format(
-                epoch, batch_idx * len(data), len(train_loader.dataset), calc_loss))
+            output = 'Train Epoch: {} [{}/{} ({:.0f}%)]\tLoss: {:.6f}'.format(epoch, batch_idx * len(data), len(train_loader.dataset), calc_loss, loss.item())
+            write_to_file(output, output_file)
             writer.add_scalar('loss', calc_loss, epoch)
             if args.dry_run:
                 break

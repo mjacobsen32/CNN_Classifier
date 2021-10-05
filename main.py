@@ -1,7 +1,10 @@
+from helper_functions import get_class_weights
 from run import run
-from helper_functions.get_random_subset import get_random_subset
-from helper_functions.split import split
+from helper_functions import get_random_subset
+from helper_functions import split
 from args import Args
+import constants as c
+import datetime
 
 DS_LENGTH = 1000
 TRAIN_RATIO = 0.85
@@ -24,7 +27,7 @@ def main():
     a1.num_classes = 2
     a1.optimizer = "Adam"
     a1.model = "AlexNet"
-    a1.percent_data = 1
+    a1.percent_data = 100
     a1.loss = "CEL"
     a1.input_dimension = 224
     a1.lr_sched = "ReduceLROnPlateau"
@@ -33,6 +36,11 @@ def main():
     a1.dry_run = False
     a1.seed = 1
     a1.augmentations = []
+    a1.class_weights = get_class_weights(a1.train_indices, a1.num_classes)
+
+    now = str(datetime.datetime.now().strftime("%d_%m_%Y_%H:%M:%S"))
+    a1.output_file_name = str(c.outputs) + now
+    a1.tb_dir = c.tb_parent_dir + now
 
     run(a1)
 
