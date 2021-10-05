@@ -1,3 +1,9 @@
+from .get_background import get_background
+from .get_perimeter_pixels import get_perimeter_pixels
+import PIL
+import numpy as np
+
+
 def pad_to_224(image):
     perimeter_pixels = get_perimeter_pixels(image)
     background = get_background(perimeter_pixels)
@@ -7,4 +13,4 @@ def pad_to_224(image):
     x = int(x/2)
     y = int(y/2)
     offset = (112 - x, 112 - y)
-    background_image.paste(image_pil, offset)
+    return(background_image.paste(image_pil, offset))

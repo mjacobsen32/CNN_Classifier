@@ -1,3 +1,8 @@
+import torch.functional as F
+import torch.nn as nn
+    
+
+
 def get_loss_fn(loss_name, class_weights, device):
   print("Loss function: {}".format(loss_name))
   print("class weights: {}".format(class_weights))

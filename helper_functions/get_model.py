@@ -1,3 +1,5 @@
+from neural_nets.AlexNet import AlexNet
+
 def get_model(model_name, num_classes, device, dims):
   print("Input dimensions: {} X {}".format(dims, dims))
   print("Output dimension: {}\n".format(num_classes))

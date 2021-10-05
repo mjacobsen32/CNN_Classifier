@@ -1,6 +1,5 @@
 from torch.utils import data
-from helper_functions.get_class_weights import get_class_weights
-from helper_functions.write_to_file import write_to_file
+from helper_functions.write_to_file import write_to_file 
 import torch
 from torchvision import transforms
 from torch.utils.tensorboard import SummaryWriter
@@ -17,6 +16,7 @@ from helper_functions.get_optimizer import get_optimizer
 from helper_functions.get_loss_fn import get_loss_fn
 from helper_functions.get_lr_sched import get_lr_sched
 from helper_functions.tally_classes import tally_classes
+from helper_functions.get_class_weights import get_class_weights
 from constants import *
 from constants import *
 import constants as c
@@ -79,7 +79,7 @@ def run(args):
     model = get_model(model_name=args.model, num_classes=args.num_classes, device=device, dims=args.input_dimension)
     optimizer = get_optimizer(opt_name=args.optimizer, lr=args.lr, params=model.parameters(), weight_decay=args.gamma)
 
-    class_weights = torch.tensor(get_class_weights(tally_classes(ds, train_set, test_set))).to(device)
+    class_weights = torch.tensor(get_class_weights(tally_classes(ds, test_loader))).to(device)
     loss_fn = get_loss_fn(args.loss, class_weights, device)
 
     output += "Multiplicative factor of learning rate decay: {}\n".format(args.gamma)
