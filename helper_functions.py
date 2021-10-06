@@ -19,22 +19,26 @@ def get_model(model_name, num_classes, device, dims, output_file):
     output += "Model: {}\n".format(model_name)
     if model_name == "AlexNet":
         nn = AlexNet(num_classes, dims).to(device)
-    output += str(nn)
+    output += (str(nn)+'\n')
     write_to_file(information=output, output_file_name=output_file)
     return(nn)
 
 
 def get_optimizer(opt_name, lr, params, weight_decay, output_file):
     output = ""
-    output += "\nOptimizer: {}".format(opt_name)
+    output += "Optimizer: {}+'\n'".format(opt_name)
     output += "Learning rate: {}\n".format(lr)
     write_to_file(information=output, output_file_name=output_file)
     if opt_name == "AdaDelta":
-        return(optim.Adadelta(params, lr))
+        return(optim.Adadelta(params))
     elif opt_name == "Adam":
-        return(optim.Adam(params, lr=lr))
+        return(optim.Adam(params))
     elif opt_name == "SGD":
         return(optim.SGD(params, lr))
+    elif opt_name == "RProp":
+        return(optim.Rprop(params))
+    elif opt_name == "AdaGrad":
+        return(optim.Adagrad(params))
 
 
 def get_perimeter_pixels(image):
@@ -58,18 +62,26 @@ def get_sub_dir(image_name):
 
 def print_image_processing(image_preprocessing, output_file):
     output = ""
-    output += "Image preprocessing: "
+    output += "Image preprocessing: \n"
     for i in image_preprocessing:
-        output += i
+        output += (i + '\n')
     write_to_file(information=output, output_file_name=output_file)
 
 
-def get_class_weights(train_i, tot_classes):
-    total_list = []
+def get_class_weights(class_list, tot_classes, train_len):
     weight_list = []
-    train_len = len(train_i)
+    for i, val in class_list:
+        weight_list.append((i, 1-(val)/int(train_len)))
+    final_list = tot_classes * [0]
+    for i, val in weight_list:
+        final_list[i] = val
+    return(final_list)
+
+
+def get_class_count(indices, tot_classes):
+    total_list = []
     data = list(csv.reader(open(c.complete_csv)))
-    for i in train_i:
+    for i in indices:
         total_list.append(data[i][1])
     full_class_list = Counter(total_list)
     if tot_classes == 2:
@@ -80,7 +92,6 @@ def get_class_weights(train_i, tot_classes):
                 class_list[0] = (0, full_class_list[i])
             else:
                 non_det += full_class_list[i]
-                
         class_list[1] = (1, non_det)
     else:
         class_list = 90 * [0]
@@ -89,13 +100,7 @@ def get_class_weights(train_i, tot_classes):
                 class_list[count] = full_class_list[i]
             else:
                 class_list[count] = 0
-    for i, val in class_list:
-        weight_list.append((i, 1-(val)/int(train_len)))
-    
-    final_list = tot_classes * [0]
-    for i, val in weight_list:
-        final_list[i] = val
-    return(final_list)
+    return(class_list)
 
 
 def write_to_file(information, output_file_name):
@@ -132,20 +137,20 @@ def get_lr_sched(sched_name, optimizer, gamma, output_file):
     output = ""
     if sched_name == "ReduceLROnPlateau":
         scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(
-            optimizer, factor=0.1, patience=5, verbose=True
+            optimizer, factor=0.1, patience=2, verbose=True
             )
     elif sched_name == "StepLR":
         scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=1, 
                                                     gamma=gamma, verbose=False)
-    output += str(scheduler)
+    output += str(scheduler) + '\n'
     write_to_file(information=output, output_file_name=output_file)
     return(scheduler)
 
 
 def get_loss_fn(loss_name, class_weights,output_file):
     output = ""
-    output += "Loss function: {}".format(loss_name)
-    output += "class weights: {}".format(class_weights)
+    output += "Loss function: {}+'\n'".format(loss_name)
+    output += "class weights: {}+'\n'".format(class_weights)
     write_to_file(output, output_file)
     if loss_name == "nll_loss":
         return(torch.functional.nll_loss)

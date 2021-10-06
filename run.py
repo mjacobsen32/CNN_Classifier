@@ -19,10 +19,7 @@ os.environ['CUDA_LAUNCH_BLOCKING'] = "1"
 # ------------ Driver ------------
 def run(args):
     output = ""
-
-    actual_count = args.num_classes * [0]
     pred_count = args.num_classes * [0]
-    target_count = args.num_classes * [0]
 
     running_loss = 0.0
     running_correct = 0
@@ -84,18 +81,20 @@ def run(args):
                           epoch, loss_fn, running_loss,
                           running_correct, writer, args.output_file_name)
         validation(model, device, test_loader, loss_fn, 
-                   actual_count, pred_count, writer, epoch, args.output_file_name)
+                   pred_count, writer, epoch, args.output_file_name)
         scheduler.step(mean_loss)
-        writer.add_scalar('learning_rate', scheduler.get_lr(), epoch)
+        # writer.add_scalar('learning_rate', scheduler.get_lr(), epoch)
+        # No method to get lr from ReduceLROnPlateau
+        # Needs manual intervention to accomplish
     total_time = time.clock() - start_time
 
-    output += "total training/validation time: {}".format(total_time)
-    output += "ms per image: {}".format(
-        total_time / (args.train_length+args.test_length)
+    output += "total training/validation time: {}\n".format(total_time)
+    output += "ms per image: {}\n".format(
+        total_time / (args.train_length+args.test_length) / args.epochs
         )
-    output += "train target: {}".format(target_count)
-    output += "test count: {}".format(actual_count)
-    output += "predicted count: {}".format(pred_count)
+    output += "train class count: {}\n".format(args.train_class_count)
+    output += "test class count: {}\n".format(args.test_class_count)
+    output += "validation class count: {}\n".format(pred_count)
 
     write_to_file(output, args.output_file_name)
 

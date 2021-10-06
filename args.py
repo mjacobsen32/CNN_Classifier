@@ -26,3 +26,7 @@ class Args:
     class_weights = []
     output_file_name = str
     tb_dir = str
+    index_file = str
+    train_class_count = []
+    test_class_count = []
+    predicted_class_count = []
