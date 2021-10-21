@@ -49,7 +49,8 @@ def run(args):
                                    target_transform=None,
                                    num_classes=args.num_classes,
                                    percent=args.percent_data,
-                                   dims=args.input_dimension)
+                                   dims=args.input_dimension,
+                                   augs=args.augmentations)
 
     output += "Train dataset length: {}\n".format(len(args.train_indices))
     output += "Test dataset length: {}\n".format(len(args.test_indices))
@@ -82,10 +83,18 @@ def run(args):
                           running_correct, writer, args.output_file_name)
         validation(model, device, test_loader, loss_fn, 
                    pred_count, writer, epoch, args.output_file_name)
-        scheduler.step(mean_loss)
-        # writer.add_scalar('learning_rate', scheduler.get_lr(), epoch)
+        #scheduler.step(mean_loss) # ReduceOnPlateau
+        scheduler.step() # StepLR
+        writer.add_scalar('learning_rate', scheduler.get_last_lr(), epoch)
         # No method to get lr from ReduceLROnPlateau
         # Needs manual intervention to accomplish
+        output += "predicted classes: {}\n".format(pred_count)
+        output += "learning rate: {}\n".format(scheduler.get_last_lr())
+        write_to_file(output, args.output_file_name)
+
+        pred_count = args.num_classes * [0]
+        output = ""
+
     total_time = time.clock() - start_time
 
     output += "total training/validation time: {}\n".format(total_time)

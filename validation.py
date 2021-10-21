@@ -19,7 +19,7 @@ def validation(model, device, test_loader, loss_fn, pred_count, writer, epoch, o
 
     test_loss /= len(test_loader.dataset)
 
-    output = '\nTest set: Average loss: {:.4f}, Accuracy: {}/{} ({:.4f}%)\n'.format(
+    output = '\nTest set: Average loss: {:.4f}, Accuracy: {}/{} ({:.4f}%)\n\n'.format(
         test_loss, correct, len(test_loader.dataset),
         100. * correct / len(test_loader.dataset))
     write_to_file(output, output_file)

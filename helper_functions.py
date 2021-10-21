@@ -4,12 +4,16 @@ import random
 import re
 import math
 import numpy as np
+import matplotlib.pyplot as plt
+import matplotlib.image as mpimg
 import PIL
 import torch
 import imgaug
 import csv
 import constants as c
 from collections import Counter
+from show_images import show_image_list
+from imgaug import augmenters as iaa
 
 
 def get_model(model_name, num_classes, device, dims, output_file):
@@ -32,7 +36,7 @@ def get_optimizer(opt_name, lr, params, weight_decay, output_file):
     if opt_name == "AdaDelta":
         return(optim.Adadelta(params))
     elif opt_name == "Adam":
-        return(optim.Adam(params))
+        return(optim.Adam(params, lr))
     elif opt_name == "SGD":
         return(optim.SGD(params, lr))
     elif opt_name == "RProp":
@@ -140,7 +144,7 @@ def get_lr_sched(sched_name, optimizer, gamma, output_file):
             optimizer, factor=0.1, patience=2, verbose=True
             )
     elif sched_name == "StepLR":
-        scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=1, 
+        scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=3, 
                                                     gamma=gamma, verbose=False)
     output += str(scheduler) + '\n'
     write_to_file(information=output, output_file_name=output_file)
@@ -165,12 +169,34 @@ def get_loss_fn(loss_name, class_weights,output_file):
         return(torch.nn.BCEWithLogitsLoss())
 
 
-def get_image(image):
+def get_image(image, aug):
     padded_image = pad_to_224(np.array(image, dtype='uint8'))
-    seq3 = imgaug.augmenters.Sequential([
-            imgaug.augmenters.pillike.FilterSmooth(),
-            imgaug.augmenters.pillike.FilterEdgeEnhance(),
-            imgaug.augmenters.Sharpen()
+    augs = iaa.Sequential([])
+    if aug == 'aug1': 
+        augs = iaa.Sequential([iaa.pillike.FilterFindEdges()])
+    elif aug == 'aug2': 
+        augs = iaa.Sequential([iaa.pillike.FilterEdgeEnhanceMore()])
+    elif aug == 'aug3': 
+        augs = iaa.Sequential([
+            iaa.pillike.FilterSmooth(),
+            iaa.pillike.FilterEdgeEnhance(),
+            iaa.Sharpen()
             ])
-    images_aug3 = seq3(images=[padded_image])
-    return(np.asarray(images_aug3[0], dtype='float32'))
+    elif aug == 'aug4': 
+        augs = iaa.Sequential([iaa.pillike.Autocontrast()])
+    elif aug == 'aug5': 
+        augs = iaa.Sequential([iaa.pillike.FilterEmboss()])
+    elif aug == 'aug6': 
+        augs = iaa.Sequential([iaa.pillike.FilterContour()])
+    elif aug == 'aug7': 
+        augs = iaa.Sharpen(alpha=(0.0, 1.0), lightness=(0.75, 2.0))
+    elif aug == 'aug8': 
+        augs = iaa.imgcorruptlike.GaussianNoise(severity=2)
+    image = augs(images=[padded_image])
+    #show_image_list(list_images=[images_aug3[0],padded_image], 
+    #            list_titles=["FilterSmooth + FilterEdgeEnhance + Sharpen", "Normal"],
+    #            num_cols=1,
+    #            figsize=(20, 10),
+    #            grid=False,
+    #            title_fontsize=20)
+    return(np.asarray(image[0], dtype='float32'))

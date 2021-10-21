@@ -22,7 +22,7 @@ class Args:
     no_cuda = bool
     dry_run = bool
     seed = int
-    augmentations = []
+    augmentations = str
     class_weights = []
     output_file_name = str
     tb_dir = str
