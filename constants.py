@@ -1,4 +1,4 @@
-complete_images = "/scratch/Phytoplankton_Images/"
-complete_csv = "/nfs/stak/users/jacomatt/Thesis/data/complete_updated.csv"
-tb_parent_dir = "/nfs/stak/users/jacomatt/Thesis/logs/"
-outputs = "/nfs/stak/users/jacomatt/Thesis/results/"
+complete_images = "../data/100k_padded/"
+complete_csv = "../data/100k.csv"
+tb_parent_dir = "../results/plots/"
+outputs = "../results/outputs
