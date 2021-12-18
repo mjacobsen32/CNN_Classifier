@@ -59,9 +59,14 @@ def get_random_subset(desired_length, ds_length):
     return(random.sample(range(0, ds_length), desired_length))
 
 
-def get_sub_dir(image_name):
+def get_sub_dir2(image_name):
     cut = re.split("_", image_name)[0:2]
     return(str(cut[0] + "_" + cut[1]))
+
+
+def get_sub_dir(image_name):
+    cut = re.split("_", image_name)[0]
+    return("phytoplankton_" + cut)
 
 
 def print_image_processing(image_preprocessing, output_file):

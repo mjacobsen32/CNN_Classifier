@@ -7,7 +7,7 @@ from args import Args
 import constants as c
 import datetime
 
-DS_LENGTH = 648711
+DS_LENGTH = 10000
 TRAIN_RATIO = 0.85
 
 
@@ -20,8 +20,8 @@ def main():
     a1.batch_size = 32
     a1.test_batch_size = 32
     a1.epochs = 20
-    a1.lr = 1 # Adam got to 82% accuracy quickly with 0.0001 as starting value
-    a1.gamma = 0.4
+    a1.lr = 0.001 # Adam got to 82% accuracy quickly with 0.0001 as starting value
+    a1.gamma = 0.2
 
     a1.optimizer = "Adam"
     a1.model = "AlexNet"
@@ -41,7 +41,7 @@ def main():
     a1.save_model = False
     a1.no_cuda = False
     a1.dry_run = False
-    a1.seed = 1
+    a1.seed = 32
     a1.train_class_count = get_class_count(a1.train_indices, a1.num_classes)
     a1.test_class_count = get_class_count(a1.test_indices, a1.num_classes)
     a1.predicted_class_count = []
