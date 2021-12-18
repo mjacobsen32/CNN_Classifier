@@ -23,6 +23,8 @@ def get_model(model_name, num_classes, device, dims, output_file):
     output += "Model: {}\n".format(model_name)
     if model_name == "AlexNet":
         nn = AlexNet(num_classes, dims).to(device)
+    elif model_name == 'DConvNetV2':
+        nn = DConvNetV2(num_classes).to(device)
     output += (str(nn)+'\n')
     write_to_file(information=output, output_file_name=output_file)
     return(nn)
