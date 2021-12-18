@@ -1,4 +1,5 @@
 from neural_nets.AlexNet import AlexNet
+from neural_nets.DConvNetV2 import DConvNetV2
 import torch.optim as optim
 import random
 import re
