@@ -1,5 +1,10 @@
 from neural_nets.AlexNet import AlexNet
+<<<<<<< HEAD
 from neural_nets.DConvNetV2 import DConvNetV2
+=======
+from neural_nets.GoogleLeNet import GoogLeNet
+from neurla_nets.DConvNetV2 import DConvNetV2
+>>>>>>> 5f059052b8bdebb3f6e3f302d452d47f2630e8a3
 import torch.optim as optim
 import random
 import re
@@ -26,6 +31,8 @@ def get_model(model_name, num_classes, device, dims, output_file):
         nn = AlexNet(num_classes, dims).to(device)
     elif model_name == 'DConvNetV2':
         nn = DConvNetV2(num_classes).to(device)
+    elif model_name == 'GoogleLeNet':
+        nn = GoogLeNet(num_classes).to(device)
     output += (str(nn)+'\n')
     write_to_file(information=output, output_file_name=output_file)
     return(nn)

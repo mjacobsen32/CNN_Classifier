@@ -1,5 +1,10 @@
+import torch.nn as nn
+import torch
+
+
 class DConvNetV2(nn.Module):
     def __init__(self, num_classes):
+        super(DConvNetV2, self).__init__()
         self.relu = nn.ReLU(inplace=True)
         self.pool = nn.MaxPool2d((2, 2))
         self.avg_pool = nn.AdaptiveAvgPool2d(1)
