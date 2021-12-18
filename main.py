@@ -10,6 +10,7 @@ import datetime
 DS_LENGTH = 10000
 TRAIN_RATIO = 0.85
 
+MODEL_LIST = ["AlexNet", "DConvNetV2"]
 
 def main():
     a1 = Args()
@@ -24,7 +25,7 @@ def main():
     a1.gamma = 0.2
 
     a1.optimizer = "Adam"
-    a1.model = "AlexNet"
+    a1.model = MODEL_LIST[1]
     a1.loss = "CEL"
     a1.lr_sched = "StepLR"
     a1.augmentations = "aug"
