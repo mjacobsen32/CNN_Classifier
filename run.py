@@ -39,9 +39,9 @@ def run(args):
         test_kwargs.update(cuda_kwargs)
 
     tf=transforms.Compose([
-        transforms.ToTensor(),
-        transforms.Normalize(mean=[0.5], std=[0.225])
+        transforms.ToTensor()
         ])
+    #transforms.Normalize(mean=[0.5], std=[0.225])
 
     ds = PhytoplanktonImageDataset(annotations_file=c.complete_csv, 
                                    img_dir=c.complete_images, 

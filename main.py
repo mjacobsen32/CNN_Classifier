@@ -10,7 +10,8 @@ import datetime
 DS_LENGTH = 10000
 TRAIN_RATIO = 0.85
 
-MODEL_LIST = ["AlexNet", "DConvNetV2"]
+CONV_NETS = ['AlexNet', 'GoogleLeNet', 'DConvNetV2']
+
 
 def main():
     a1 = Args()
@@ -21,11 +22,11 @@ def main():
     a1.batch_size = 32
     a1.test_batch_size = 32
     a1.epochs = 20
-    a1.lr = 0.001 # Adam got to 82% accuracy quickly with 0.0001 as starting value
+    a1.lr = 0.0002 # Adam got to 82% accuracy quickly with 0.0001 as starting value
     a1.gamma = 0.2
 
     a1.optimizer = "Adam"
-    a1.model = MODEL_LIST[1]
+    a1.model = CONV_NETS[1]
     a1.loss = "CEL"
     a1.lr_sched = "StepLR"
     a1.augmentations = "aug"
