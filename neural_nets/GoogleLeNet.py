@@ -55,7 +55,7 @@ class GoogLeNet(nn.Module):
     def __init__(self,num_output):
         super(GoogLeNet,self).__init__()
         self.stem_layer = nn.Sequential(
-            nn.Conv2d(3,64,7,2,3),
+            nn.Conv2d(1,64,7,2,3),
             nn.ReLU(),
             nn.MaxPool2d(3,2,1),
             nn.Conv2d(64,64,1),
