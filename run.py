@@ -6,6 +6,7 @@ from tensorboardX import SummaryWriter
 import os
 import time
 from dataset_class import PhytoplanktonImageDataset
+import torchvision.models as models
 from train import train
 from validation import validation
 from train2 import train2
@@ -55,8 +56,8 @@ def run(args):
                                    dims=args.input_dimension,
                                    augs=args.augmentations)
 
-    fake_ds = torchvision.datasets.FakeData(size= 100, 
-                                  image_size= (1, 224, 224), 
+    fake_ds = torchvision.datasets.FakeData(size= 1000, 
+                                  image_size= (3, 224, 224), 
                                   num_classes= 2, 
                                   transform= tf, 
                                   target_transform= None, 
@@ -68,20 +69,22 @@ def run(args):
     train_set = torch.utils.data.Subset(ds, args.train_indices)
     test_set = torch.utils.data.Subset(ds, args.test_indices) # try using train ds as test ds
 
-    #train_set = torch.utils.data.Subset(fake_ds, range(0,85,1))
-    #test_set = torch.utils.data.Subset(fake_ds, range(85,99,1))
+    #train_set = torch.utils.data.Subset(fake_ds, range(0,850,1))
+    #test_set = torch.utils.data.Subset(fake_ds, range(850,999,1))
 
     train_loader = torch.utils.data.DataLoader(train_set, **train_kwargs)
     test_loader = torch.utils.data.DataLoader(test_set, **test_kwargs)
 
     writer = SummaryWriter(args.tb_dir)
 
-    model = get_model(model_name=args.model, 
-                      num_classes=args.num_classes, 
-                      device=device, 
-                      dims=args.input_dimension, 
-                      output_file=args.output_file_name)
-    
+    #model = get_model(model_name=args.model, 
+    #                  num_classes=args.num_classes, 
+    #                  device=device, 
+    #                  dims=args.input_dimension, 
+    #                  output_file=args.output_file_name)
+    model = models.alexnet(num_classes=2).to(device)
+
+
     optimizer = get_optimizer(opt_name=args.optimizer, 
                               lr=args.lr, 
                               params=model.parameters(), 
