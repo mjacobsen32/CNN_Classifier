@@ -1,10 +1,6 @@
 from neural_nets.AlexNet import AlexNet
-<<<<<<< HEAD
 from neural_nets.DConvNetV2 import DConvNetV2
-=======
 from neural_nets.GoogleLeNet import GoogLeNet
-from neurla_nets.DConvNetV2 import DConvNetV2
->>>>>>> 5f059052b8bdebb3f6e3f302d452d47f2630e8a3
 import torch.optim as optim
 import random
 import re

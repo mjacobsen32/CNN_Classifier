@@ -41,7 +41,7 @@ def run(args):
     tf=transforms.Compose([
         transforms.ToTensor(),
         transforms.Normalize(mean=[0.5], std=[0.225])
-        ])
+    ])
 
     ds = PhytoplanktonImageDataset(annotations_file=c.complete_csv, 
                                    img_dir=c.complete_images, 
@@ -75,7 +75,7 @@ def run(args):
     write_to_file(output, args.output_file_name)
     output = ""
 
-    start_time = time.time()
+    start_time = time.clock()
     for epoch in range(1, args.epochs + 1):
         mean_loss = train(args, model, device, 
                           train_loader, optimizer, 
@@ -95,7 +95,7 @@ def run(args):
         pred_count = args.num_classes * [0]
         output = ""
 
-    total_time = time.time() - start_time
+    total_time = time.clock() - start_time
 
     output += "total training/validation time: {}\n".format(total_time)
     output += "ms per image: {}\n".format(
