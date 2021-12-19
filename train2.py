@@ -11,7 +11,8 @@ def train2(args, model, device, train_loader, optimizer, epoch, loss_fn):
         targets = targets.to(device)
             
         ### FORWARD AND BACK PROP
-        logits, _ = model(features)
+        #logits, _ = model(features)
+        logits = model(features)
         loss = loss_fn(logits, targets)
         optimizer.zero_grad()
         
