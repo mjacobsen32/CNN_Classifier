@@ -7,7 +7,7 @@ from args import Args
 import constants as c
 import datetime
 
-DS_LENGTH = 10000
+DS_LENGTH = 100000
 TRAIN_RATIO = 0.85
 
 MODEL_LIST = ["AlexNet", "DConvNetV2", "GoogleLeNet"]
@@ -17,12 +17,12 @@ def main():
 
     a1.augmentations = "aug" # Ranges from 1-8 'aug' is no augmentations applied
 
-    a1.desired_length = 5000
-    a1.batch_size = 32
-    a1.test_batch_size = 32
-    a1.epochs = 10
-    a1.lr = 0.01 # Adam got to 82% accuracy quickly with 0.0001 as starting value
-    a1.gamma = 0.1
+    a1.desired_length = 100000
+    a1.batch_size = 64
+    a1.test_batch_size = 64
+    a1.epochs = 20
+    a1.lr = 0.0001 # Adam got to 82% accuracy quickly with 0.0001 as starting value
+    a1.gamma = 1.0
 
     a1.optimizer = "Adam"
     a1.model = MODEL_LIST[0]
