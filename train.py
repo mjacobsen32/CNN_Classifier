@@ -6,10 +6,10 @@ def train(args, model, device, train_loader, optimizer, epoch, loss_fn, running_
     losses = []
     for batch_idx, (data, target) in enumerate(train_loader):
         data, target = data.to(device), target.to(device)
-        optimizer.zero_grad()
         output = model(data)
         loss = loss_fn(output, target)
         losses.append(loss.item())
+        optimizer.zero_grad() # moved from above output=
         loss.backward()
         optimizer.step()
 
@@ -24,4 +24,5 @@ def train(args, model, device, train_loader, optimizer, epoch, loss_fn, running_
             writer.add_scalar('loss', calc_loss, epoch)
             if args.dry_run:
                 break
+            
     return sum(losses) / len(losses)
