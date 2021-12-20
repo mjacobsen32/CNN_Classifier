@@ -35,8 +35,8 @@ class PhytoplanktonImageDataset(Dataset):
                 label = 0
             else:
                 label = 1
-        if self.transform: # Transforms applied: Resize to 28 X 28, Normalize 
+        if self.transform:
             image = self.transform(image)
         if self.target_transform:
-            label = self.target_transform(label) # NONE
+            label = self.target_transform(label)
         return image, label

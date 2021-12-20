@@ -204,10 +204,4 @@ def get_image(image, aug):
     elif aug == 'aug8': 
         augs = iaa.imgcorruptlike.GaussianNoise(severity=2)
     image = augs(images=[padded_image])
-    #show_image_list(list_images=[images_aug3[0],padded_image], 
-    #            list_titles=["FilterSmooth + FilterEdgeEnhance + Sharpen", "Normal"],
-    #            num_cols=1,
-    #            figsize=(20, 10),
-    #            grid=False,
-    #            title_fontsize=20)
     return(np.asarray(image[0], dtype='float32'))

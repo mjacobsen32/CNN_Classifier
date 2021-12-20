@@ -1,12 +1,13 @@
 class Args:
     desired_length = int
     subset_indices = int
-    train_indices = int
-    test_indices = int
+    train_indices = [int]
+    validation_indices = [int]
+    test_indices = [int]
     train_length = int
-    test_length = int
+    validation_length = int
     batch_size = int
-    test_batch_size = int
+    validation_batch_size = int
     epochs = int
     lr = float
     gamma = float
@@ -28,5 +29,5 @@ class Args:
     tb_dir = str
     index_file = str
     train_class_count = []
-    test_class_count = []
+    validation_class_count = []
     predicted_class_count = []

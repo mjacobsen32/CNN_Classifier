@@ -19,9 +19,9 @@ def main():
 
     a1.desired_length = 100000
     a1.batch_size = 64
-    a1.test_batch_size = 64
+    a1.validation_batch_size = 64
     a1.epochs = 20
-    a1.lr = 0.0001 # Adam got to 82% accuracy quickly with 0.0001 as starting value
+    a1.lr = 0.0001
     a1.gamma = 1.0
 
     a1.optimizer = "Adam"
@@ -30,21 +30,25 @@ def main():
     a1.lr_sched = "StepLR"
     a1.augmentations = "aug"
 
-    a1.subset_indices = get_random_subset(a1.desired_length, DS_LENGTH)
-    a1.train_indices, a1.test_indices = split(a1.subset_indices, TRAIN_RATIO)
+    #a1.subset_indices = get_random_subset(a1.desired_length, DS_LENGTH)
+    #a1.train_indices, a1.validation_indices = split(a1.subset_indices, TRAIN_RATIO)
+    a1.train_indices = range(0, 85000, 1)
+    a1.validation_indices = range(85000, 99999, 1)
+    
     a1.train_length = len(a1.train_indices)
-    a1.test_length = len(a1.test_indices)
+    a1.validation_length = len(a1.validation_indices)
     a1.log_interval = 100
     a1.num_classes = 2
     a1.percent_data = 100
     a1.input_dimension = 224
 
-    a1.save_model = False
+    a1.save_model = True
     a1.no_cuda = False
     a1.dry_run = False
     a1.seed = 32
+    
     a1.train_class_count = get_class_count(a1.train_indices, a1.num_classes)
-    a1.test_class_count = get_class_count(a1.test_indices, a1.num_classes)
+    a1.validation_class_count = get_class_count(a1.validation_indices, a1.num_classes)
     a1.predicted_class_count = []
     a1.class_weights = get_class_weights(a1.train_class_count, 
             a1.num_classes, a1.train_length)

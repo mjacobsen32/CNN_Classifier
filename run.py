@@ -55,25 +55,26 @@ def run(args):
                                    percent=args.percent_data,
                                    dims=args.input_dimension,
                                    augs=args.augmentations)
-
-    fake_ds = torchvision.datasets.FakeData(size= 1000, 
-                                  image_size= (3, 224, 224), 
-                                  num_classes= 2, 
-                                  transform= tf, 
-                                  target_transform= None, 
-                                  random_offset= 0)
+    
+    test_ds = PhytoplanktonImageDataset(annotations_file=c.test_csv, 
+                                   img_dir=c.test_images, 
+                                   transform=tf,
+                                   target_transform=None,
+                                   num_classes=args.num_classes,
+                                   percent=args.percent_data,
+                                   dims=args.input_dimension,
+                                   augs=args.augmentations)
 
     output += "Train dataset length: {}\n".format(len(args.train_indices))
+    output += "Validation dataset length: {}\n".format(len(args.validation_indices))
     output += "Test dataset length: {}\n".format(len(args.test_indices))
 
     train_set = torch.utils.data.Subset(ds, args.train_indices)
-    test_set = torch.utils.data.Subset(ds, args.test_indices) # try using train ds as test ds
-
-    #train_set = torch.utils.data.Subset(fake_ds, range(0,850,1))
-    #test_set = torch.utils.data.Subset(fake_ds, range(850,999,1))
+    validation_set = torch.utils.data.Subset(ds, args.validation_indices) # try using train ds as test ds
 
     train_loader = torch.utils.data.DataLoader(train_set, **train_kwargs)
-    test_loader = torch.utils.data.DataLoader(test_set, **test_kwargs)
+    validation_loader = torch.utils.data.DataLoader(validation_set, **test_kwargs)
+    test_loader = torch.utils.data.DataLoader(test_ds, **test_kwargs)
 
     writer = SummaryWriter(args.tb_dir)
 
@@ -102,19 +103,10 @@ def run(args):
 
     start_time = time.time()
     for epoch in range(1, args.epochs + 1):
-        train2(args, model, device, train_loader, optimizer, epoch, loss_fn)
-        '''
-        mean_loss = train(args, model, device, 
-                          train_loader, optimizer, 
-                          epoch, loss_fn, running_loss,
-                          running_correct, writer, args.output_file_name)
-        model.eval() # added
-        validation(model, device, test_loader, loss_fn, 
-                   pred_count, writer, epoch, args.output_file_name)
-        '''
+        train2(args, model, device, train_loader, validation_loader, optimizer, epoch, loss_fn)
         #scheduler.step(mean_loss) # ReduceOnPlateau
         scheduler.step() # StepLR
-        writer.add_scalar('learning_rate', scheduler.get_last_lr(), epoch)
+        #writer.add_scalar('learning_rate', scheduler.get_last_lr(), epoch)
         # No method to get lr from ReduceLROnPlateau
         # Needs manual intervention to accomplish
         #output += "predicted classes: {}\n".format(pred_count)
@@ -130,7 +122,7 @@ def run(args):
 
     output += "total training/validation time: {}\n".format(total_time)
     output += "ms per image: {}\n".format(
-        total_time / (args.train_length+args.test_length) / args.epochs
+        total_time / (args.train_length+args.validation_length) / args.epochs
         )
     #output += "train class count: {}\n".format(args.train_class_count)
     #output += "test class count: {}\n".format(args.test_class_count)

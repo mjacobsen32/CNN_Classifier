@@ -3,7 +3,7 @@ from compute_accuracy import compute_accuracy
 import torch
 
 
-def train2(args, model, device, train_loader, optimizer, epoch, loss_fn):
+def train2(args, model, device, train_loader, validation_loader, optimizer, epoch, loss_fn):
     model.train()
     for batch_idx, (features, targets) in enumerate(train_loader):
         
@@ -31,5 +31,5 @@ def train2(args, model, device, train_loader, optimizer, epoch, loss_fn):
     model.eval()
     with torch.set_grad_enabled(False): # save memory during inference
         print('Epoch: %03d/%03d | Train: %.3f%%' % (
-              epoch+1, args.epochs, 
-              compute_accuracy(model, train_loader, device=device)))
+              epoch, args.epochs, 
+              compute_accuracy(model, validation_loader, device=device)))
