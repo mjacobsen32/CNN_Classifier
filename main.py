@@ -19,8 +19,8 @@ def main():
 
     a1.desired_length = 100000
     a1.batch_size = 64
-    a1.validation_batch_size = 64
-    a1.epochs = 20
+    a1.test_batch_size = 64
+    a1.epochs = 1
     a1.lr = 0.0001
     a1.gamma = 1.0
 
@@ -30,10 +30,10 @@ def main():
     a1.lr_sched = "StepLR"
     a1.augmentations = "aug"
 
-    #a1.subset_indices = get_random_subset(a1.desired_length, DS_LENGTH)
-    #a1.train_indices, a1.validation_indices = split(a1.subset_indices, TRAIN_RATIO)
-    a1.train_indices = range(0, 85000, 1)
-    a1.validation_indices = range(85000, 99999, 1)
+    a1.subset_indices = get_random_subset(a1.desired_length, DS_LENGTH)
+    a1.train_indices, a1.validation_indices = split(a1.subset_indices, TRAIN_RATIO)
+    #a1.train_indices = range(0, 85000, 1)
+    #a1.validation_indices = range(85000, 99999, 1)
     
     a1.train_length = len(a1.train_indices)
     a1.validation_length = len(a1.validation_indices)
