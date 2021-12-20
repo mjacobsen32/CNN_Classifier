@@ -16,6 +16,7 @@ import constants as c
 from collections import Counter
 from show_images import show_image_list
 from imgaug import augmenters as iaa
+import torchvision.models as models
 
 
 def get_model(model_name, num_classes, device, dims, output_file):
@@ -24,7 +25,7 @@ def get_model(model_name, num_classes, device, dims, output_file):
     output += "Output dimension: {}\n".format(num_classes)
     output += "Model: {}\n".format(model_name)
     if model_name == "AlexNet":
-        nn = AlexNet(num_classes, dims).to(device)
+        nn = models.alexnet(num_classes=num_classes).to(device)
     elif model_name == 'DConvNetV2':
         nn = DConvNetV2(num_classes).to(device)
     elif model_name == 'GoogleLeNet':
