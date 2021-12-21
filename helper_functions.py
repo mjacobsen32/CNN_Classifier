@@ -190,7 +190,7 @@ def get_loss_fn(loss_name, class_weights,output_file):
 
 
 def get_image(image, aug):
-    padded_image = pad_to_224(np.array(image, dtype='uint8'))
+    #padded_image = pad_to_224(np.array(image, dtype='uint8'))
     augs = iaa.Sequential([])
     if aug == 'aug1': 
         augs = iaa.Sequential([iaa.pillike.FilterFindEdges()])
@@ -212,5 +212,5 @@ def get_image(image, aug):
         augs = iaa.Sharpen(alpha=(0.0, 1.0), lightness=(0.75, 2.0))
     elif aug == 'aug8': 
         augs = iaa.imgcorruptlike.GaussianNoise(severity=2)
-    image = augs(images=[padded_image])
+    image = augs(images=[image])
     return(np.asarray(image[0], dtype='float32'))

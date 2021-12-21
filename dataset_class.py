@@ -25,8 +25,8 @@ class PhytoplanktonImageDataset(Dataset):
 
     def __getitem__(self, idx):
         img_path = os.path.join(self.img_dir, get_sub_dir(self.img_labels.iloc[idx, 0]),self.img_labels.iloc[idx, 0]) # image path
-        #image = get_image(np.array(PIL.Image.open(img_path), dtype=np.float32), self.augs)
-        image = np.array(PIL.Image.open(img_path).convert('RGB'), dtype=np.float32)
+        image = get_image(np.array(PIL.Image.open(img_path).convert('RGB'), dtype=np.uint8), self.augs)
+        #image = np.array(PIL.Image.open(img_path).convert('RGB'), dtype=np.float32)
         # no longer using .convert('RGB')
         classification = self.img_labels.iloc[idx,1] # getting label from csv
         label = (classification - 1)
