@@ -7,7 +7,7 @@ class Args:
     train_length = int
     validation_length = int
     batch_size = int
-    validation_batch_size = int
+    test_batch_size = int
     epochs = int
     lr = float
     gamma = float
@@ -31,3 +31,4 @@ class Args:
     train_class_count = []
     validation_class_count = []
     predicted_class_count = []
+    start = str

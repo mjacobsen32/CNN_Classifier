@@ -6,7 +6,6 @@ from tensorboardX import SummaryWriter
 import os
 import time
 from dataset_class import PhytoplanktonImageDataset
-import torchvision.models as models
 from train import train
 from validation import validation
 from train2 import train2
@@ -17,16 +16,14 @@ from helper_functions import get_optimizer
 from helper_functions import get_loss_fn
 from helper_functions import get_lr_sched
 from helper_functions import write_to_file 
+import numpy as np
 import constants as c
+import matplotlib.pyplot as plt
 os.environ['CUDA_LAUNCH_BLOCKING'] = "1"
 
 # ------------ Driver ------------
 def run(args):
     output = ""
-    pred_count = args.num_classes * [0]
-
-    running_loss = 0.0
-    running_correct = 0
 
     use_cuda = not args.no_cuda and torch.cuda.is_available()
     torch.manual_seed(args.seed)
@@ -78,13 +75,11 @@ def run(args):
 
     writer = SummaryWriter(args.tb_dir)
 
-    #model = get_model(model_name=args.model, 
-    #                  num_classes=args.num_classes, 
-    #                  device=device, 
-    #                  dims=args.input_dimension, 
-    #                  output_file=args.output_file_name)
-    model = models.alexnet(num_classes=2).to(device)
-
+    model = get_model(model_name=args.model, 
+                      num_classes=args.num_classes, 
+                      device=device, 
+                      dims=args.input_dimension, 
+                      output_file=args.output_file_name)
 
     optimizer = get_optimizer(opt_name=args.optimizer, 
                               lr=args.lr, 
@@ -101,22 +96,34 @@ def run(args):
     write_to_file(output, args.output_file_name)
     output = ""
 
+    train_acc_list = []
+    validation_acc_list = []
+    loss_list = []
+
     start_time = time.time()
     for epoch in range(1, args.epochs + 1):
-        train2(args, model, device, train_loader, validation_loader, optimizer, epoch, loss_fn)
-        #scheduler.step(mean_loss) # ReduceOnPlateau
+        train2(args, model, device, train_loader, validation_loader, optimizer, epoch, loss_fn, train_acc_list, validation_acc_list, loss_list)
         scheduler.step() # StepLR
-        #writer.add_scalar('learning_rate', scheduler.get_last_lr(), epoch)
-        # No method to get lr from ReduceLROnPlateau
-        # Needs manual intervention to accomplish
-        #output += "predicted classes: {}\n".format(pred_count)
-        #output += "learning rate: {}\n".format(scheduler.get_last_lr())
-        write_to_file(output, args.output_file_name)
-
-        pred_count = args.num_classes * [0]
-        output = ""
     total_time = time.time() - start_time
-    
+
+    x = np.array(range(0,args.epochs,1))
+    fig, ax1 = plt.subplots() 
+  
+    ax1.set_xlabel('epochs') 
+    ax1.set_ylabel('accuracy', color = 'green') 
+    ax1.plot(x, np.array(train_acc_list), color = 'green') 
+    ax1.plot(x, np.array(validation_acc_list), color = 'blue')
+    ax1.tick_params(axis ='y', labelcolor = 'green') 
+  
+    # Adding Twin Axes
+
+    ax2 = ax1.twinx() 
+  
+    ax2.set_ylabel('loss', color = 'red') 
+    ax2.plot(x, np.array(loss_list), color = 'red') 
+    ax2.tick_params(axis ='y', labelcolor = 'red') 
+    plt.savefig(args.start + '_plot.png')
+
     with torch.set_grad_enabled(False): # save memory during inference
         print('Test accuracy: %.2f%%' % (compute_accuracy(model, test_loader, device=device)))
 

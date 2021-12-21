@@ -20,7 +20,7 @@ def main():
     a1.desired_length = 100000
     a1.batch_size = 64
     a1.test_batch_size = 64
-    a1.epochs = 1
+    a1.epochs = 20
     a1.lr = 0.0001
     a1.gamma = 1.0
 
@@ -28,13 +28,13 @@ def main():
     a1.model = MODEL_LIST[0]
     a1.loss = "CEL"
     a1.lr_sched = "StepLR"
-    a1.augmentations = "aug"
+    a1.augmentations = "none"
 
-    a1.subset_indices = get_random_subset(a1.desired_length, DS_LENGTH)
-    a1.train_indices, a1.validation_indices = split(a1.subset_indices, TRAIN_RATIO)
-    #a1.train_indices = range(0, 85000, 1)
-    #a1.validation_indices = range(85000, 99999, 1)
-    
+    #a1.subset_indices = get_random_subset(a1.desired_length, DS_LENGTH)
+    #a1.train_indices, a1.validation_indices = split(a1.subset_indices, TRAIN_RATIO)
+    a1.train_indices = range(0, 85000, 1)
+    a1.validation_indices = range(85000, 100000, 1)
+
     a1.train_length = len(a1.train_indices)
     a1.validation_length = len(a1.validation_indices)
     a1.log_interval = 100
@@ -55,15 +55,9 @@ def main():
     a1.tb_dir = c.tb_parent_dir
 
     now = str(datetime.datetime.now().strftime("%d_%m_%Y_%H:%M:%S"))
-    a1.index_file = str(c.outputs) + now
-
-    #output = "train indices: {}\ntest indices: {}\n".format(a1.train_indices, 
-    #        a1.test_indices)
-    #write_to_file(output, str(a1.index_file + "_INDEXES"))
-    output = ""
-    now = str(datetime.datetime.now().strftime("%d_%m_%Y_%H:%M:%S"))
-    a1.output_file_name = str(c.outputs) + now
-    a1.augmentations = "aug"
+    a1.start = now
+    a1.output_file_name = str(c.outputs) + a1.start
+    a1.augmentations = "none"
     run(a1)
 
 if __name__ == '__main__':

@@ -1,0 +1,608 @@
+Input dimensions: 224 X 224
+Output dimension: 2
+Model: AlexNet
+AlexNet(
+  (features): Sequential(
+    (0): Conv2d(3, 64, kernel_size=(11, 11), stride=(4, 4), padding=(2, 2))
+    (1): ReLU(inplace=True)
+    (2): MaxPool2d(kernel_size=3, stride=2, padding=0, dilation=1, ceil_mode=False)
+    (3): Conv2d(64, 192, kernel_size=(5, 5), stride=(1, 1), padding=(2, 2))
+    (4): ReLU(inplace=True)
+    (5): MaxPool2d(kernel_size=3, stride=2, padding=0, dilation=1, ceil_mode=False)
+    (6): Conv2d(192, 384, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (7): ReLU(inplace=True)
+    (8): Conv2d(384, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (9): ReLU(inplace=True)
+    (10): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (11): ReLU(inplace=True)
+    (12): MaxPool2d(kernel_size=3, stride=2, padding=0, dilation=1, ceil_mode=False)
+  )
+  (avgpool): AdaptiveAvgPool2d(output_size=(6, 6))
+  (classifier): Sequential(
+    (0): Dropout(p=0.5, inplace=False)
+    (1): Linear(in_features=9216, out_features=4096, bias=True)
+    (2): ReLU(inplace=True)
+    (3): Dropout(p=0.5, inplace=False)
+    (4): Linear(in_features=4096, out_features=4096, bias=True)
+    (5): ReLU(inplace=True)
+    (6): Linear(in_features=4096, out_features=2, bias=True)
+  )
+)
+
+Optimizer: Adam+'
+'Learning rate: 0.0001
+
+Loss function: CEL+'
+'class weights: tensor([0.3640, 0.6360], device='cuda:0')+'
+'
+<torch.optim.lr_scheduler.StepLR object at 0x77f955c1fca0>
+
+Train dataset length: 85000
+Validation dataset length: 15000
+Test dataset length: 1
+Multiplicative factor of learning rate decay: 1.0
+
+Epoch: 002/020 | Batch 0000/1329 | Cost: 72.7647
+Epoch: 002/020 | Batch 0050/1329 | Cost: 18.6935
+Epoch: 002/020 | Batch 0100/1329 | Cost: 14.5154
+Epoch: 002/020 | Batch 0150/1329 | Cost: 16.0610
+Epoch: 002/020 | Batch 0200/1329 | Cost: 13.2513
+Epoch: 002/020 | Batch 0250/1329 | Cost: 19.2293
+Epoch: 002/020 | Batch 0300/1329 | Cost: 17.5132
+Epoch: 002/020 | Batch 0350/1329 | Cost: 17.9546
+Epoch: 002/020 | Batch 0400/1329 | Cost: 13.5452
+Epoch: 002/020 | Batch 0450/1329 | Cost: 15.9164
+Epoch: 002/020 | Batch 0500/1329 | Cost: 16.1896
+Epoch: 002/020 | Batch 0550/1329 | Cost: 16.3472
+Epoch: 002/020 | Batch 0600/1329 | Cost: 11.4274
+Epoch: 002/020 | Batch 0650/1329 | Cost: 13.1515
+Epoch: 002/020 | Batch 0700/1329 | Cost: 12.2368
+Epoch: 002/020 | Batch 0750/1329 | Cost: 12.0845
+Epoch: 002/020 | Batch 0800/1329 | Cost: 13.5407
+Epoch: 002/020 | Batch 0850/1329 | Cost: 10.6956
+Epoch: 002/020 | Batch 0900/1329 | Cost: 11.4361
+Epoch: 002/020 | Batch 0950/1329 | Cost: 12.3006
+Epoch: 002/020 | Batch 1000/1329 | Cost: 13.9953
+Epoch: 002/020 | Batch 1050/1329 | Cost: 12.6836
+Epoch: 002/020 | Batch 1100/1329 | Cost: 12.0259
+Epoch: 002/020 | Batch 1150/1329 | Cost: 15.2337
+Epoch: 002/020 | Batch 1200/1329 | Cost: 14.0842
+Epoch: 002/020 | Batch 1250/1329 | Cost: 13.2749
+Epoch: 002/020 | Batch 1300/1329 | Cost: 14.4126
+Epoch: 001/020 | Train: 82.053%
+Epoch: 003/020 | Batch 0000/1329 | Cost: 11.0648
+Epoch: 003/020 | Batch 0050/1329 | Cost: 12.9631
+Epoch: 003/020 | Batch 0100/1329 | Cost: 9.7394
+Epoch: 003/020 | Batch 0150/1329 | Cost: 9.0182
+Epoch: 003/020 | Batch 0200/1329 | Cost: 13.6033
+Epoch: 003/020 | Batch 0250/1329 | Cost: 12.5866
+Epoch: 003/020 | Batch 0300/1329 | Cost: 8.1683
+Epoch: 003/020 | Batch 0350/1329 | Cost: 9.8167
+Epoch: 003/020 | Batch 0400/1329 | Cost: 13.8347
+Epoch: 003/020 | Batch 0450/1329 | Cost: 10.4632
+Epoch: 003/020 | Batch 0500/1329 | Cost: 8.8869
+Epoch: 003/020 | Batch 0550/1329 | Cost: 10.3367
+Epoch: 003/020 | Batch 0600/1329 | Cost: 10.1376
+Epoch: 003/020 | Batch 0650/1329 | Cost: 8.5249
+Epoch: 003/020 | Batch 0700/1329 | Cost: 12.2213
+Epoch: 003/020 | Batch 0750/1329 | Cost: 13.0606
+Epoch: 003/020 | Batch 0800/1329 | Cost: 12.5976
+Epoch: 003/020 | Batch 0850/1329 | Cost: 15.8335
+Epoch: 003/020 | Batch 0900/1329 | Cost: 12.7927
+Epoch: 003/020 | Batch 0950/1329 | Cost: 11.6331
+Epoch: 003/020 | Batch 1000/1329 | Cost: 10.2958
+Epoch: 003/020 | Batch 1050/1329 | Cost: 9.8355
+Epoch: 003/020 | Batch 1100/1329 | Cost: 10.9268
+Epoch: 003/020 | Batch 1150/1329 | Cost: 9.8479
+Epoch: 003/020 | Batch 1200/1329 | Cost: 13.7028
+Epoch: 003/020 | Batch 1250/1329 | Cost: 7.7307
+Epoch: 003/020 | Batch 1300/1329 | Cost: 11.5755
+Epoch: 002/020 | Train: 82.127%
+Epoch: 004/020 | Batch 0000/1329 | Cost: 6.8958
+Epoch: 004/020 | Batch 0050/1329 | Cost: 17.0078
+Epoch: 004/020 | Batch 0100/1329 | Cost: 10.0296
+Epoch: 004/020 | Batch 0150/1329 | Cost: 11.7585
+Epoch: 004/020 | Batch 0200/1329 | Cost: 8.4580
+Epoch: 004/020 | Batch 0250/1329 | Cost: 11.5103
+Epoch: 004/020 | Batch 0300/1329 | Cost: 9.5262
+Epoch: 004/020 | Batch 0350/1329 | Cost: 11.4746
+Epoch: 004/020 | Batch 0400/1329 | Cost: 13.1931
+Epoch: 004/020 | Batch 0450/1329 | Cost: 10.2450
+Epoch: 004/020 | Batch 0500/1329 | Cost: 9.5852
+Epoch: 004/020 | Batch 0550/1329 | Cost: 10.8252
+Epoch: 004/020 | Batch 0600/1329 | Cost: 10.6399
+Epoch: 004/020 | Batch 0650/1329 | Cost: 12.5994
+Epoch: 004/020 | Batch 0700/1329 | Cost: 10.8787
+Epoch: 004/020 | Batch 0750/1329 | Cost: 14.6434
+Epoch: 004/020 | Batch 0800/1329 | Cost: 9.1954
+Epoch: 004/020 | Batch 0850/1329 | Cost: 11.3559
+Epoch: 004/020 | Batch 0900/1329 | Cost: 20.1568
+Epoch: 004/020 | Batch 0950/1329 | Cost: 11.3212
+Epoch: 004/020 | Batch 1000/1329 | Cost: 11.5236
+Epoch: 004/020 | Batch 1050/1329 | Cost: 10.7343
+Epoch: 004/020 | Batch 1100/1329 | Cost: 11.9842
+Epoch: 004/020 | Batch 1150/1329 | Cost: 12.0371
+Epoch: 004/020 | Batch 1200/1329 | Cost: 9.8470
+Epoch: 004/020 | Batch 1250/1329 | Cost: 8.2060
+Epoch: 004/020 | Batch 1300/1329 | Cost: 10.4417
+Epoch: 003/020 | Train: 82.180%
+Epoch: 005/020 | Batch 0000/1329 | Cost: 15.4594
+Epoch: 005/020 | Batch 0050/1329 | Cost: 9.5940
+Epoch: 005/020 | Batch 0100/1329 | Cost: 9.7052
+Epoch: 005/020 | Batch 0150/1329 | Cost: 13.8427
+Epoch: 005/020 | Batch 0200/1329 | Cost: 7.5211
+Epoch: 005/020 | Batch 0250/1329 | Cost: 11.4333
+Epoch: 005/020 | Batch 0300/1329 | Cost: 9.9814
+Epoch: 005/020 | Batch 0350/1329 | Cost: 7.7621
+Epoch: 005/020 | Batch 0400/1329 | Cost: 13.1062
+Epoch: 005/020 | Batch 0450/1329 | Cost: 10.6095
+Epoch: 005/020 | Batch 0500/1329 | Cost: 13.3791
+Epoch: 005/020 | Batch 0550/1329 | Cost: 9.1998
+Epoch: 005/020 | Batch 0600/1329 | Cost: 9.4222
+Epoch: 005/020 | Batch 0650/1329 | Cost: 9.2089
+Epoch: 005/020 | Batch 0700/1329 | Cost: 14.5285
+Epoch: 005/020 | Batch 0750/1329 | Cost: 11.7588
+Epoch: 005/020 | Batch 0800/1329 | Cost: 10.3961
+Epoch: 005/020 | Batch 0850/1329 | Cost: 7.6025
+Epoch: 005/020 | Batch 0900/1329 | Cost: 11.4859
+Epoch: 005/020 | Batch 0950/1329 | Cost: 13.4432
+Epoch: 005/020 | Batch 1000/1329 | Cost: 8.4546
+Epoch: 005/020 | Batch 1050/1329 | Cost: 12.9215
+Epoch: 005/020 | Batch 1100/1329 | Cost: 9.6052
+Epoch: 005/020 | Batch 1150/1329 | Cost: 11.0380
+Epoch: 005/020 | Batch 1200/1329 | Cost: 11.2999
+Epoch: 005/020 | Batch 1250/1329 | Cost: 10.6817
+Epoch: 005/020 | Batch 1300/1329 | Cost: 8.9465
+Epoch: 004/020 | Train: 83.487%
+Epoch: 006/020 | Batch 0000/1329 | Cost: 17.0817
+Epoch: 006/020 | Batch 0050/1329 | Cost: 7.7159
+Epoch: 006/020 | Batch 0100/1329 | Cost: 12.9604
+Epoch: 006/020 | Batch 0150/1329 | Cost: 10.4533
+Epoch: 006/020 | Batch 0200/1329 | Cost: 10.6976
+Epoch: 006/020 | Batch 0250/1329 | Cost: 8.9863
+Epoch: 006/020 | Batch 0300/1329 | Cost: 10.5701
+Epoch: 006/020 | Batch 0350/1329 | Cost: 8.1791
+Epoch: 006/020 | Batch 0400/1329 | Cost: 11.3232
+Epoch: 006/020 | Batch 0450/1329 | Cost: 12.4036
+Epoch: 006/020 | Batch 0500/1329 | Cost: 9.4490
+Epoch: 006/020 | Batch 0550/1329 | Cost: 9.1726
+Epoch: 006/020 | Batch 0600/1329 | Cost: 7.2302
+Epoch: 006/020 | Batch 0650/1329 | Cost: 8.6995
+Epoch: 006/020 | Batch 0700/1329 | Cost: 7.4805
+Epoch: 006/020 | Batch 0750/1329 | Cost: 10.0323
+Epoch: 006/020 | Batch 0800/1329 | Cost: 12.3651
+Epoch: 006/020 | Batch 0850/1329 | Cost: 12.4074
+Epoch: 006/020 | Batch 0900/1329 | Cost: 9.8873
+Epoch: 006/020 | Batch 0950/1329 | Cost: 11.2350
+Epoch: 006/020 | Batch 1000/1329 | Cost: 6.9151
+Epoch: 006/020 | Batch 1050/1329 | Cost: 12.7500
+Epoch: 006/020 | Batch 1100/1329 | Cost: 9.7563
+Epoch: 006/020 | Batch 1150/1329 | Cost: 9.2908
+Epoch: 006/020 | Batch 1200/1329 | Cost: 10.7513
+Epoch: 006/020 | Batch 1250/1329 | Cost: 11.4541
+Epoch: 006/020 | Batch 1300/1329 | Cost: 8.1865
+Epoch: 005/020 | Train: 84.513%
+Epoch: 007/020 | Batch 0000/1329 | Cost: 13.7495
+Epoch: 007/020 | Batch 0050/1329 | Cost: 12.4616
+Epoch: 007/020 | Batch 0100/1329 | Cost: 11.3751
+Epoch: 007/020 | Batch 0150/1329 | Cost: 10.4032
+Epoch: 007/020 | Batch 0200/1329 | Cost: 9.8155
+Epoch: 007/020 | Batch 0250/1329 | Cost: 10.5736
+Epoch: 007/020 | Batch 0300/1329 | Cost: 12.2907
+Epoch: 007/020 | Batch 0350/1329 | Cost: 9.7718
+Epoch: 007/020 | Batch 0400/1329 | Cost: 12.0996
+Epoch: 007/020 | Batch 0450/1329 | Cost: 6.5190
+Epoch: 007/020 | Batch 0500/1329 | Cost: 9.3353
+Epoch: 007/020 | Batch 0550/1329 | Cost: 6.9491
+Epoch: 007/020 | Batch 0600/1329 | Cost: 8.9184
+Epoch: 007/020 | Batch 0650/1329 | Cost: 9.4594
+Epoch: 007/020 | Batch 0700/1329 | Cost: 9.7361
+Epoch: 007/020 | Batch 0750/1329 | Cost: 11.8638
+Epoch: 007/020 | Batch 0800/1329 | Cost: 7.7629
+Epoch: 007/020 | Batch 0850/1329 | Cost: 11.9161
+Epoch: 007/020 | Batch 0900/1329 | Cost: 10.7747
+Epoch: 007/020 | Batch 0950/1329 | Cost: 9.5831
+Epoch: 007/020 | Batch 1000/1329 | Cost: 12.8038
+Epoch: 007/020 | Batch 1050/1329 | Cost: 21.3501
+Epoch: 007/020 | Batch 1100/1329 | Cost: 10.9524
+Epoch: 007/020 | Batch 1150/1329 | Cost: 12.0749
+Epoch: 007/020 | Batch 1200/1329 | Cost: 10.9875
+Epoch: 007/020 | Batch 1250/1329 | Cost: 9.9253
+Epoch: 007/020 | Batch 1300/1329 | Cost: 11.7606
+Epoch: 006/020 | Train: 77.667%
+Epoch: 008/020 | Batch 0000/1329 | Cost: 9.8197
+Epoch: 008/020 | Batch 0050/1329 | Cost: 11.1383
+Epoch: 008/020 | Batch 0100/1329 | Cost: 7.7482
+Epoch: 008/020 | Batch 0150/1329 | Cost: 6.4775
+Epoch: 008/020 | Batch 0200/1329 | Cost: 9.7300
+Epoch: 008/020 | Batch 0250/1329 | Cost: 7.9739
+Epoch: 008/020 | Batch 0300/1329 | Cost: 12.2954
+Epoch: 008/020 | Batch 0350/1329 | Cost: 8.7944
+Epoch: 008/020 | Batch 0400/1329 | Cost: 12.8945
+Epoch: 008/020 | Batch 0450/1329 | Cost: 8.4829
+Epoch: 008/020 | Batch 0500/1329 | Cost: 7.9049
+Epoch: 008/020 | Batch 0550/1329 | Cost: 14.5288
+Epoch: 008/020 | Batch 0600/1329 | Cost: 9.5033
+Epoch: 008/020 | Batch 0650/1329 | Cost: 9.6964
+Epoch: 008/020 | Batch 0700/1329 | Cost: 12.1628
+Epoch: 008/020 | Batch 0750/1329 | Cost: 7.9517
+Epoch: 008/020 | Batch 0800/1329 | Cost: 11.8341
+Epoch: 008/020 | Batch 0850/1329 | Cost: 7.0880
+Epoch: 008/020 | Batch 0900/1329 | Cost: 11.6425
+Epoch: 008/020 | Batch 0950/1329 | Cost: 10.2748
+Epoch: 008/020 | Batch 1000/1329 | Cost: 6.8450
+Epoch: 008/020 | Batch 1050/1329 | Cost: 11.7393
+Epoch: 008/020 | Batch 1100/1329 | Cost: 11.3913
+Epoch: 008/020 | Batch 1150/1329 | Cost: 9.4779
+Epoch: 008/020 | Batch 1200/1329 | Cost: 9.8019
+Epoch: 008/020 | Batch 1250/1329 | Cost: 8.0462
+Epoch: 008/020 | Batch 1300/1329 | Cost: 10.7962
+Epoch: 007/020 | Train: 85.200%
+Epoch: 009/020 | Batch 0000/1329 | Cost: 8.7788
+Epoch: 009/020 | Batch 0050/1329 | Cost: 8.3693
+Epoch: 009/020 | Batch 0100/1329 | Cost: 7.0871
+Epoch: 009/020 | Batch 0150/1329 | Cost: 12.0985
+Epoch: 009/020 | Batch 0200/1329 | Cost: 9.6673
+Epoch: 009/020 | Batch 0250/1329 | Cost: 9.0613
+Epoch: 009/020 | Batch 0300/1329 | Cost: 5.5614
+Epoch: 009/020 | Batch 0350/1329 | Cost: 9.2724
+Epoch: 009/020 | Batch 0400/1329 | Cost: 12.0720
+Epoch: 009/020 | Batch 0450/1329 | Cost: 8.2088
+Epoch: 009/020 | Batch 0500/1329 | Cost: 10.1692
+Epoch: 009/020 | Batch 0550/1329 | Cost: 6.7571
+Epoch: 009/020 | Batch 0600/1329 | Cost: 11.1175
+Epoch: 009/020 | Batch 0650/1329 | Cost: 7.8876
+Epoch: 009/020 | Batch 0700/1329 | Cost: 7.7296
+Epoch: 009/020 | Batch 0750/1329 | Cost: 10.6800
+Epoch: 009/020 | Batch 0800/1329 | Cost: 10.6141
+Epoch: 009/020 | Batch 0850/1329 | Cost: 7.8229
+Epoch: 009/020 | Batch 0900/1329 | Cost: 8.3863
+Epoch: 009/020 | Batch 0950/1329 | Cost: 8.6457
+Epoch: 009/020 | Batch 1000/1329 | Cost: 10.9633
+Epoch: 009/020 | Batch 1050/1329 | Cost: 5.5939
+Epoch: 009/020 | Batch 1100/1329 | Cost: 8.6310
+Epoch: 009/020 | Batch 1150/1329 | Cost: 10.1542
+Epoch: 009/020 | Batch 1200/1329 | Cost: 8.6179
+Epoch: 009/020 | Batch 1250/1329 | Cost: 6.1150
+Epoch: 009/020 | Batch 1300/1329 | Cost: 9.9467
+Epoch: 008/020 | Train: 82.807%
+Epoch: 010/020 | Batch 0000/1329 | Cost: 10.1747
+Epoch: 010/020 | Batch 0050/1329 | Cost: 10.2677
+Epoch: 010/020 | Batch 0100/1329 | Cost: 8.5619
+Epoch: 010/020 | Batch 0150/1329 | Cost: 11.7393
+Epoch: 010/020 | Batch 0200/1329 | Cost: 9.2546
+Epoch: 010/020 | Batch 0250/1329 | Cost: 8.0869
+Epoch: 010/020 | Batch 0300/1329 | Cost: 6.9853
+Epoch: 010/020 | Batch 0350/1329 | Cost: 7.9339
+Epoch: 010/020 | Batch 0400/1329 | Cost: 7.5810
+Epoch: 010/020 | Batch 0450/1329 | Cost: 6.5347
+Epoch: 010/020 | Batch 0500/1329 | Cost: 8.9041
+Epoch: 010/020 | Batch 0550/1329 | Cost: 11.6569
+Epoch: 010/020 | Batch 0600/1329 | Cost: 12.9022
+Epoch: 010/020 | Batch 0650/1329 | Cost: 13.4673
+Epoch: 010/020 | Batch 0700/1329 | Cost: 8.0521
+Epoch: 010/020 | Batch 0750/1329 | Cost: 7.0149
+Epoch: 010/020 | Batch 0800/1329 | Cost: 6.9106
+Epoch: 010/020 | Batch 0850/1329 | Cost: 6.9917
+Epoch: 010/020 | Batch 0900/1329 | Cost: 10.2729
+Epoch: 010/020 | Batch 0950/1329 | Cost: 6.1619
+Epoch: 010/020 | Batch 1000/1329 | Cost: 9.9502
+Epoch: 010/020 | Batch 1050/1329 | Cost: 9.5501
+Epoch: 010/020 | Batch 1100/1329 | Cost: 10.2344
+Epoch: 010/020 | Batch 1150/1329 | Cost: 10.6412
+Epoch: 010/020 | Batch 1200/1329 | Cost: 6.4344
+Epoch: 010/020 | Batch 1250/1329 | Cost: 8.3409
+Epoch: 010/020 | Batch 1300/1329 | Cost: 9.4916
+Epoch: 009/020 | Train: 84.287%
+Epoch: 011/020 | Batch 0000/1329 | Cost: 8.1992
+Epoch: 011/020 | Batch 0050/1329 | Cost: 11.1377
+Epoch: 011/020 | Batch 0100/1329 | Cost: 6.9465
+Epoch: 011/020 | Batch 0150/1329 | Cost: 6.7920
+Epoch: 011/020 | Batch 0200/1329 | Cost: 9.2781
+Epoch: 011/020 | Batch 0250/1329 | Cost: 10.3561
+Epoch: 011/020 | Batch 0300/1329 | Cost: 9.0746
+Epoch: 011/020 | Batch 0350/1329 | Cost: 8.8756
+Epoch: 011/020 | Batch 0400/1329 | Cost: 7.2960
+Epoch: 011/020 | Batch 0450/1329 | Cost: 8.1702
+Epoch: 011/020 | Batch 0500/1329 | Cost: 6.7310
+Epoch: 011/020 | Batch 0550/1329 | Cost: 6.7967
+Epoch: 011/020 | Batch 0600/1329 | Cost: 8.9985
+Epoch: 011/020 | Batch 0650/1329 | Cost: 8.6513
+Epoch: 011/020 | Batch 0700/1329 | Cost: 11.4830
+Epoch: 011/020 | Batch 0750/1329 | Cost: 7.1492
+Epoch: 011/020 | Batch 0800/1329 | Cost: 10.3628
+Epoch: 011/020 | Batch 0850/1329 | Cost: 10.7195
+Epoch: 011/020 | Batch 0900/1329 | Cost: 7.5170
+Epoch: 011/020 | Batch 0950/1329 | Cost: 8.3730
+Epoch: 011/020 | Batch 1000/1329 | Cost: 8.2680
+Epoch: 011/020 | Batch 1050/1329 | Cost: 9.4089
+Epoch: 011/020 | Batch 1100/1329 | Cost: 12.8465
+Epoch: 011/020 | Batch 1150/1329 | Cost: 11.2794
+Epoch: 011/020 | Batch 1200/1329 | Cost: 9.1907
+Epoch: 011/020 | Batch 1250/1329 | Cost: 9.6108
+Epoch: 011/020 | Batch 1300/1329 | Cost: 11.0603
+Epoch: 010/020 | Train: 84.613%
+Epoch: 012/020 | Batch 0000/1329 | Cost: 7.5651
+Epoch: 012/020 | Batch 0050/1329 | Cost: 7.8390
+Epoch: 012/020 | Batch 0100/1329 | Cost: 13.1414
+Epoch: 012/020 | Batch 0150/1329 | Cost: 6.0212
+Epoch: 012/020 | Batch 0200/1329 | Cost: 6.3989
+Epoch: 012/020 | Batch 0250/1329 | Cost: 7.8118
+Epoch: 012/020 | Batch 0300/1329 | Cost: 11.1137
+Epoch: 012/020 | Batch 0350/1329 | Cost: 7.8627
+Epoch: 012/020 | Batch 0400/1329 | Cost: 9.7502
+Epoch: 012/020 | Batch 0450/1329 | Cost: 9.3251
+Epoch: 012/020 | Batch 0500/1329 | Cost: 8.6040
+Epoch: 012/020 | Batch 0550/1329 | Cost: 9.6253
+Epoch: 012/020 | Batch 0600/1329 | Cost: 11.0781
+Epoch: 012/020 | Batch 0650/1329 | Cost: 6.6312
+Epoch: 012/020 | Batch 0700/1329 | Cost: 11.5623
+Epoch: 012/020 | Batch 0750/1329 | Cost: 8.2998
+Epoch: 012/020 | Batch 0800/1329 | Cost: 11.1214
+Epoch: 012/020 | Batch 0850/1329 | Cost: 9.9951
+Epoch: 012/020 | Batch 0900/1329 | Cost: 10.0412
+Epoch: 012/020 | Batch 0950/1329 | Cost: 8.6857
+Epoch: 012/020 | Batch 1000/1329 | Cost: 8.2642
+Epoch: 012/020 | Batch 1050/1329 | Cost: 8.4703
+Epoch: 012/020 | Batch 1100/1329 | Cost: 8.5272
+Epoch: 012/020 | Batch 1150/1329 | Cost: 10.1060
+Epoch: 012/020 | Batch 1200/1329 | Cost: 9.2066
+Epoch: 012/020 | Batch 1250/1329 | Cost: 8.4370
+Epoch: 012/020 | Batch 1300/1329 | Cost: 9.1508
+Epoch: 011/020 | Train: 84.387%
+Epoch: 013/020 | Batch 0000/1329 | Cost: 7.3308
+Epoch: 013/020 | Batch 0050/1329 | Cost: 8.6499
+Epoch: 013/020 | Batch 0100/1329 | Cost: 6.5921
+Epoch: 013/020 | Batch 0150/1329 | Cost: 12.2663
+Epoch: 013/020 | Batch 0200/1329 | Cost: 5.3346
+Epoch: 013/020 | Batch 0250/1329 | Cost: 5.3950
+Epoch: 013/020 | Batch 0300/1329 | Cost: 6.3104
+Epoch: 013/020 | Batch 0350/1329 | Cost: 5.9426
+Epoch: 013/020 | Batch 0400/1329 | Cost: 10.0580
+Epoch: 013/020 | Batch 0450/1329 | Cost: 6.4848
+Epoch: 013/020 | Batch 0500/1329 | Cost: 6.1283
+Epoch: 013/020 | Batch 0550/1329 | Cost: 8.3830
+Epoch: 013/020 | Batch 0600/1329 | Cost: 10.9368
+Epoch: 013/020 | Batch 0650/1329 | Cost: 8.7002
+Epoch: 013/020 | Batch 0700/1329 | Cost: 7.8821
+Epoch: 013/020 | Batch 0750/1329 | Cost: 12.5239
+Epoch: 013/020 | Batch 0800/1329 | Cost: 10.7242
+Epoch: 013/020 | Batch 0850/1329 | Cost: 8.0607
+Epoch: 013/020 | Batch 0900/1329 | Cost: 10.6160
+Epoch: 013/020 | Batch 0950/1329 | Cost: 8.7761
+Epoch: 013/020 | Batch 1000/1329 | Cost: 6.0604
+Epoch: 013/020 | Batch 1050/1329 | Cost: 9.4271
+Epoch: 013/020 | Batch 1100/1329 | Cost: 6.7819
+Epoch: 013/020 | Batch 1150/1329 | Cost: 8.3299
+Epoch: 013/020 | Batch 1200/1329 | Cost: 8.8352
+Epoch: 013/020 | Batch 1250/1329 | Cost: 8.9830
+Epoch: 013/020 | Batch 1300/1329 | Cost: 7.6270
+Epoch: 012/020 | Train: 85.247%
+Epoch: 014/020 | Batch 0000/1329 | Cost: 8.6999
+Epoch: 014/020 | Batch 0050/1329 | Cost: 9.9235
+Epoch: 014/020 | Batch 0100/1329 | Cost: 12.0351
+Epoch: 014/020 | Batch 0150/1329 | Cost: 7.5363
+Epoch: 014/020 | Batch 0200/1329 | Cost: 8.9794
+Epoch: 014/020 | Batch 0250/1329 | Cost: 8.1997
+Epoch: 014/020 | Batch 0300/1329 | Cost: 10.6013
+Epoch: 014/020 | Batch 0350/1329 | Cost: 6.1349
+Epoch: 014/020 | Batch 0400/1329 | Cost: 4.5714
+Epoch: 014/020 | Batch 0450/1329 | Cost: 8.3142
+Epoch: 014/020 | Batch 0500/1329 | Cost: 7.6749
+Epoch: 014/020 | Batch 0550/1329 | Cost: 5.0256
+Epoch: 014/020 | Batch 0600/1329 | Cost: 9.4282
+Epoch: 014/020 | Batch 0650/1329 | Cost: 11.2578
+Epoch: 014/020 | Batch 0700/1329 | Cost: 16.7710
+Epoch: 014/020 | Batch 0750/1329 | Cost: 13.1477
+Epoch: 014/020 | Batch 0800/1329 | Cost: 8.3121
+Epoch: 014/020 | Batch 0850/1329 | Cost: 6.7633
+Epoch: 014/020 | Batch 0900/1329 | Cost: 11.9382
+Epoch: 014/020 | Batch 0950/1329 | Cost: 17.5169
+Epoch: 014/020 | Batch 1000/1329 | Cost: 7.9444
+Epoch: 014/020 | Batch 1050/1329 | Cost: 6.6106
+Epoch: 014/020 | Batch 1100/1329 | Cost: 7.5700
+Epoch: 014/020 | Batch 1150/1329 | Cost: 7.7389
+Epoch: 014/020 | Batch 1200/1329 | Cost: 8.2719
+Epoch: 014/020 | Batch 1250/1329 | Cost: 6.9188
+Epoch: 014/020 | Batch 1300/1329 | Cost: 9.5262
+Epoch: 013/020 | Train: 84.753%
+Epoch: 015/020 | Batch 0000/1329 | Cost: 7.6741
+Epoch: 015/020 | Batch 0050/1329 | Cost: 11.5308
+Epoch: 015/020 | Batch 0100/1329 | Cost: 7.5164
+Epoch: 015/020 | Batch 0150/1329 | Cost: 4.6386
+Epoch: 015/020 | Batch 0200/1329 | Cost: 7.8446
+Epoch: 015/020 | Batch 0250/1329 | Cost: 9.9506
+Epoch: 015/020 | Batch 0300/1329 | Cost: 12.8613
+Epoch: 015/020 | Batch 0350/1329 | Cost: 7.3979
+Epoch: 015/020 | Batch 0400/1329 | Cost: 8.7573
+Epoch: 015/020 | Batch 0450/1329 | Cost: 6.7602
+Epoch: 015/020 | Batch 0500/1329 | Cost: 9.8160
+Epoch: 015/020 | Batch 0550/1329 | Cost: 7.4857
+Epoch: 015/020 | Batch 0600/1329 | Cost: 7.5925
+Epoch: 015/020 | Batch 0650/1329 | Cost: 6.9861
+Epoch: 015/020 | Batch 0700/1329 | Cost: 7.3455
+Epoch: 015/020 | Batch 0750/1329 | Cost: 9.7401
+Epoch: 015/020 | Batch 0800/1329 | Cost: 8.3221
+Epoch: 015/020 | Batch 0850/1329 | Cost: 7.2480
+Epoch: 015/020 | Batch 0900/1329 | Cost: 7.9375
+Epoch: 015/020 | Batch 0950/1329 | Cost: 8.2845
+Epoch: 015/020 | Batch 1000/1329 | Cost: 9.1573
+Epoch: 015/020 | Batch 1050/1329 | Cost: 8.1717
+Epoch: 015/020 | Batch 1100/1329 | Cost: 9.6724
+Epoch: 015/020 | Batch 1150/1329 | Cost: 11.6602
+Epoch: 015/020 | Batch 1200/1329 | Cost: 7.6098
+Epoch: 015/020 | Batch 1250/1329 | Cost: 9.4705
+Epoch: 015/020 | Batch 1300/1329 | Cost: 6.5249
+Epoch: 014/020 | Train: 85.807%
+Epoch: 016/020 | Batch 0000/1329 | Cost: 7.8382
+Epoch: 016/020 | Batch 0050/1329 | Cost: 6.7880
+Epoch: 016/020 | Batch 0100/1329 | Cost: 5.4714
+Epoch: 016/020 | Batch 0150/1329 | Cost: 8.8779
+Epoch: 016/020 | Batch 0200/1329 | Cost: 6.4780
+Epoch: 016/020 | Batch 0250/1329 | Cost: 5.6223
+Epoch: 016/020 | Batch 0300/1329 | Cost: 10.9962
+Epoch: 016/020 | Batch 0350/1329 | Cost: 8.9086
+Epoch: 016/020 | Batch 0400/1329 | Cost: 7.3792
+Epoch: 016/020 | Batch 0450/1329 | Cost: 7.9996
+Epoch: 016/020 | Batch 0500/1329 | Cost: 10.6066
+Epoch: 016/020 | Batch 0550/1329 | Cost: 8.2724
+Epoch: 016/020 | Batch 0600/1329 | Cost: 9.9799
+Epoch: 016/020 | Batch 0650/1329 | Cost: 8.9479
+Epoch: 016/020 | Batch 0700/1329 | Cost: 9.1426
+Epoch: 016/020 | Batch 0750/1329 | Cost: 10.4483
+Epoch: 016/020 | Batch 0800/1329 | Cost: 7.4133
+Epoch: 016/020 | Batch 0850/1329 | Cost: 7.1790
+Epoch: 016/020 | Batch 0900/1329 | Cost: 10.8949
+Epoch: 016/020 | Batch 0950/1329 | Cost: 6.9474
+Epoch: 016/020 | Batch 1000/1329 | Cost: 8.8571
+Epoch: 016/020 | Batch 1050/1329 | Cost: 11.7941
+Epoch: 016/020 | Batch 1100/1329 | Cost: 5.8018
+Epoch: 016/020 | Batch 1150/1329 | Cost: 7.6547
+Epoch: 016/020 | Batch 1200/1329 | Cost: 8.8615
+Epoch: 016/020 | Batch 1250/1329 | Cost: 5.7465
+Epoch: 016/020 | Batch 1300/1329 | Cost: 10.2990
+Epoch: 015/020 | Train: 85.653%
+Epoch: 017/020 | Batch 0000/1329 | Cost: 8.3627
+Epoch: 017/020 | Batch 0050/1329 | Cost: 10.2503
+Epoch: 017/020 | Batch 0100/1329 | Cost: 6.9120
+Epoch: 017/020 | Batch 0150/1329 | Cost: 10.3005
+Epoch: 017/020 | Batch 0200/1329 | Cost: 13.1661
+Epoch: 017/020 | Batch 0250/1329 | Cost: 8.5380
+Epoch: 017/020 | Batch 0300/1329 | Cost: 5.0005
+Epoch: 017/020 | Batch 0350/1329 | Cost: 4.7979
+Epoch: 017/020 | Batch 0400/1329 | Cost: 9.6672
+Epoch: 017/020 | Batch 0450/1329 | Cost: 10.6817
+Epoch: 017/020 | Batch 0500/1329 | Cost: 8.3673
+Epoch: 017/020 | Batch 0550/1329 | Cost: 9.0504
+Epoch: 017/020 | Batch 0600/1329 | Cost: 8.9021
+Epoch: 017/020 | Batch 0650/1329 | Cost: 8.1233
+Epoch: 017/020 | Batch 0700/1329 | Cost: 7.0607
+Epoch: 017/020 | Batch 0750/1329 | Cost: 11.1814
+Epoch: 017/020 | Batch 0800/1329 | Cost: 5.7252
+Epoch: 017/020 | Batch 0850/1329 | Cost: 5.4417
+Epoch: 017/020 | Batch 0900/1329 | Cost: 6.8021
+Epoch: 017/020 | Batch 0950/1329 | Cost: 11.6167
+Epoch: 017/020 | Batch 1000/1329 | Cost: 6.9126
+Epoch: 017/020 | Batch 1050/1329 | Cost: 6.6267
+Epoch: 017/020 | Batch 1100/1329 | Cost: 7.5337
+Epoch: 017/020 | Batch 1150/1329 | Cost: 6.7629
+Epoch: 017/020 | Batch 1200/1329 | Cost: 10.3723
+Epoch: 017/020 | Batch 1250/1329 | Cost: 6.3093
+Epoch: 017/020 | Batch 1300/1329 | Cost: 8.3177
+Epoch: 016/020 | Train: 84.700%
+Epoch: 018/020 | Batch 0000/1329 | Cost: 6.1156
+Epoch: 018/020 | Batch 0050/1329 | Cost: 6.0258
+Epoch: 018/020 | Batch 0100/1329 | Cost: 6.3067
+Epoch: 018/020 | Batch 0150/1329 | Cost: 6.5155
+Epoch: 018/020 | Batch 0200/1329 | Cost: 6.6454
+Epoch: 018/020 | Batch 0250/1329 | Cost: 13.5354
+Epoch: 018/020 | Batch 0300/1329 | Cost: 8.0754
+Epoch: 018/020 | Batch 0350/1329 | Cost: 10.0845
+Epoch: 018/020 | Batch 0400/1329 | Cost: 8.7717
+Epoch: 018/020 | Batch 0450/1329 | Cost: 8.2834
+Epoch: 018/020 | Batch 0500/1329 | Cost: 6.5436
+Epoch: 018/020 | Batch 0550/1329 | Cost: 6.5712
+Epoch: 018/020 | Batch 0600/1329 | Cost: 10.0014
+Epoch: 018/020 | Batch 0650/1329 | Cost: 4.7297
+Epoch: 018/020 | Batch 0700/1329 | Cost: 10.7471
+Epoch: 018/020 | Batch 0750/1329 | Cost: 9.1753
+Epoch: 018/020 | Batch 0800/1329 | Cost: 6.0705
+Epoch: 018/020 | Batch 0850/1329 | Cost: 7.0162
+Epoch: 018/020 | Batch 0900/1329 | Cost: 4.8536
+Epoch: 018/020 | Batch 0950/1329 | Cost: 10.7463
+Epoch: 018/020 | Batch 1000/1329 | Cost: 6.4335
+Epoch: 018/020 | Batch 1050/1329 | Cost: 6.2889
+Epoch: 018/020 | Batch 1100/1329 | Cost: 5.0236
+Epoch: 018/020 | Batch 1150/1329 | Cost: 6.9789
+Epoch: 018/020 | Batch 1200/1329 | Cost: 6.9047
+Epoch: 018/020 | Batch 1250/1329 | Cost: 8.0366
+Epoch: 018/020 | Batch 1300/1329 | Cost: 7.9209
+Epoch: 017/020 | Train: 85.567%
+Epoch: 019/020 | Batch 0000/1329 | Cost: 6.2135
+Epoch: 019/020 | Batch 0050/1329 | Cost: 6.8469
+Epoch: 019/020 | Batch 0100/1329 | Cost: 6.7864
+Epoch: 019/020 | Batch 0150/1329 | Cost: 9.5265
+Epoch: 019/020 | Batch 0200/1329 | Cost: 7.8572
+Epoch: 019/020 | Batch 0250/1329 | Cost: 8.5270
+Epoch: 019/020 | Batch 0300/1329 | Cost: 9.1512
+Epoch: 019/020 | Batch 0350/1329 | Cost: 6.6273
+Epoch: 019/020 | Batch 0400/1329 | Cost: 6.7347
+Epoch: 019/020 | Batch 0450/1329 | Cost: 6.9307
+Epoch: 019/020 | Batch 0500/1329 | Cost: 5.4554
+Epoch: 019/020 | Batch 0550/1329 | Cost: 6.3781
+Epoch: 019/020 | Batch 0600/1329 | Cost: 7.9371
+Epoch: 019/020 | Batch 0650/1329 | Cost: 4.3021
+Epoch: 019/020 | Batch 0700/1329 | Cost: 5.9740
+Epoch: 019/020 | Batch 0750/1329 | Cost: 8.2642
+Epoch: 019/020 | Batch 0800/1329 | Cost: 11.0132
+Epoch: 019/020 | Batch 0850/1329 | Cost: 9.5530
+Epoch: 019/020 | Batch 0900/1329 | Cost: 7.8781
+Epoch: 019/020 | Batch 0950/1329 | Cost: 11.6280
+Epoch: 019/020 | Batch 1000/1329 | Cost: 7.0221
+Epoch: 019/020 | Batch 1050/1329 | Cost: 6.0665
+Epoch: 019/020 | Batch 1100/1329 | Cost: 7.1738
+Epoch: 019/020 | Batch 1150/1329 | Cost: 7.4298
+Epoch: 019/020 | Batch 1200/1329 | Cost: 8.5433
+Epoch: 019/020 | Batch 1250/1329 | Cost: 3.9554
+Epoch: 019/020 | Batch 1300/1329 | Cost: 10.6762
+Epoch: 018/020 | Train: 84.933%
+Epoch: 020/020 | Batch 0000/1329 | Cost: 8.4704
+Epoch: 020/020 | Batch 0050/1329 | Cost: 8.3470
+Epoch: 020/020 | Batch 0100/1329 | Cost: 7.6011
+Epoch: 020/020 | Batch 0150/1329 | Cost: 6.0123
+Epoch: 020/020 | Batch 0200/1329 | Cost: 8.7630
+Epoch: 020/020 | Batch 0250/1329 | Cost: 7.2196
+Epoch: 020/020 | Batch 0300/1329 | Cost: 6.8435
+Epoch: 020/020 | Batch 0350/1329 | Cost: 5.7191
+Epoch: 020/020 | Batch 0400/1329 | Cost: 4.6238
+Epoch: 020/020 | Batch 0450/1329 | Cost: 10.4491
+Epoch: 020/020 | Batch 0500/1329 | Cost: 8.2436
+Epoch: 020/020 | Batch 0550/1329 | Cost: 7.7091
+Epoch: 020/020 | Batch 0600/1329 | Cost: 5.6536
+Epoch: 020/020 | Batch 0650/1329 | Cost: 7.1942
+Epoch: 020/020 | Batch 0700/1329 | Cost: 7.8755
+Epoch: 020/020 | Batch 0750/1329 | Cost: 5.1201
+Epoch: 020/020 | Batch 0800/1329 | Cost: 5.8699
+Epoch: 020/020 | Batch 0850/1329 | Cost: 8.4840
+Epoch: 020/020 | Batch 0900/1329 | Cost: 7.3845
+Epoch: 020/020 | Batch 0950/1329 | Cost: 9.2601
+Epoch: 020/020 | Batch 1000/1329 | Cost: 11.4572
+Epoch: 020/020 | Batch 1050/1329 | Cost: 6.1157
+Epoch: 020/020 | Batch 1100/1329 | Cost: 7.8582
+Epoch: 020/020 | Batch 1150/1329 | Cost: 8.0094
+Epoch: 020/020 | Batch 1200/1329 | Cost: 6.9869
+Epoch: 020/020 | Batch 1250/1329 | Cost: 8.2787
+Epoch: 020/020 | Batch 1300/1329 | Cost: 6.2194
+Epoch: 019/020 | Train: 85.820%
+Epoch: 021/020 | Batch 0000/1329 | Cost: 6.5653
+Epoch: 021/020 | Batch 0050/1329 | Cost: 6.1313
+Epoch: 021/020 | Batch 0100/1329 | Cost: 7.8629
+Epoch: 021/020 | Batch 0150/1329 | Cost: 7.1363
+Epoch: 021/020 | Batch 0200/1329 | Cost: 6.4407
+Epoch: 021/020 | Batch 0250/1329 | Cost: 4.9050
+Epoch: 021/020 | Batch 0300/1329 | Cost: 7.6932
+Epoch: 021/020 | Batch 0350/1329 | Cost: 7.9175
+Epoch: 021/020 | Batch 0400/1329 | Cost: 8.5780
+Epoch: 021/020 | Batch 0450/1329 | Cost: 6.5202
+Epoch: 021/020 | Batch 0500/1329 | Cost: 6.7431
+Epoch: 021/020 | Batch 0550/1329 | Cost: 8.1017
+Epoch: 021/020 | Batch 0600/1329 | Cost: 11.7501
+Epoch: 021/020 | Batch 0650/1329 | Cost: 3.5849
+Epoch: 021/020 | Batch 0700/1329 | Cost: 4.0662
+Epoch: 021/020 | Batch 0750/1329 | Cost: 4.5600
+Epoch: 021/020 | Batch 0800/1329 | Cost: 9.5536
+Epoch: 021/020 | Batch 0850/1329 | Cost: 7.5600
+Epoch: 021/020 | Batch 0900/1329 | Cost: 9.2542
+Epoch: 021/020 | Batch 0950/1329 | Cost: 10.0002
+Epoch: 021/020 | Batch 1000/1329 | Cost: 7.1013
+Epoch: 021/020 | Batch 1050/1329 | Cost: 9.4834
+Epoch: 021/020 | Batch 1100/1329 | Cost: 7.8466
+Epoch: 021/020 | Batch 1150/1329 | Cost: 6.7717
+Epoch: 021/020 | Batch 1200/1329 | Cost: 4.1029
+Epoch: 021/020 | Batch 1250/1329 | Cost: 5.5573
+Epoch: 021/020 | Batch 1300/1329 | Cost: 4.9327
+Epoch: 020/020 | Train: 86.020%
+Test accuracy: 85.42%
+total training/validation time: 9261.266901493073
+ms per image: 0.004630633450746537
+
