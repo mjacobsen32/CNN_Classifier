@@ -28,8 +28,16 @@ def get_model(model_name, num_classes, device, dims, output_file):
         nn = models.alexnet(num_classes=num_classes).to(device)
     elif model_name == 'DConvNetV2':
         nn = DConvNetV2(num_classes).to(device)
-    elif model_name == 'GoogleLeNet':
-        nn = GoogLeNet(num_classes).to(device)
+    elif model_name == 'squeezenet1_1':
+        nn = models.squeezenet1_1(num_classes=num_classes).to(device)
+    elif model_name == 'InceptionV3':
+        nn = models.inception_v3(num_classes=num_classes).to(device)
+    elif model_name == 'DenseNet169':
+        nn = models.densenet169(num_classes=num_classes).to(device)
+    elif model_name == 'ResNet50':
+        nn = models.resnet50(num_classes=num_classes).to(device)
+    elif model_name == 'VGG13':
+        nn = models.vgg13(num_classes=num_classes).to(device)
     output += (str(nn)+'\n')
     write_to_file(information=output, output_file_name=output_file)
     return(nn)

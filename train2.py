@@ -1,7 +1,7 @@
 from helper_functions import write_to_file
 from compute_accuracy import compute_accuracy
 import torch
-
+import numpy as np
 
 def train2(args, model, device, train_loader, 
            validation_loader, optimizer, epoch, 
@@ -23,11 +23,11 @@ def train2(args, model, device, train_loader,
         loss.backward()
         ### UPDATE MODEL PARAMETERS
         optimizer.step()
-        
+        loss_list.append(loss)
         ### LOGGING
         if not batch_idx % 50:
-            output = ('Epoch: %03d/%03d | Batch %04d/%04d | Cost: %.4f' 
-                   %(epoch+1, args.epochs, batch_idx, 
+            output = ('Epoch: %03d/%03d | Batch %04d/%04d | Cost: %.4f\n' 
+                   %(epoch, args.epochs, batch_idx, 
                      len(train_loader), loss))
             write_to_file(output, args.output_file_name)
 
@@ -38,7 +38,6 @@ def train2(args, model, device, train_loader,
         train_acc = compute_accuracy(model, train_loader, device=device)
         validation_acc_list.append(val_acc)
         train_acc_list.append(train_acc)
-        loss_list.append(loss)
-        output = ('Epoch: %03d/%03d | Train: %.3f%%' % (
+        output = ('Epoch: %03d/%03d | Train: %.3f%%\n' % (
               epoch, args.epochs, val_acc))
         write_to_file(output, args.output_file_name)

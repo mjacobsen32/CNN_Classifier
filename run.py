@@ -73,8 +73,6 @@ def run(args):
     validation_loader = torch.utils.data.DataLoader(validation_set, **test_kwargs)
     test_loader = torch.utils.data.DataLoader(test_ds, **test_kwargs)
 
-    writer = SummaryWriter(args.tb_dir)
-
     model = get_model(model_name=args.model, 
                       num_classes=args.num_classes, 
                       device=device, 
@@ -105,7 +103,7 @@ def run(args):
         train2(args, model, device, train_loader, validation_loader, optimizer, epoch, loss_fn, train_acc_list, validation_acc_list, loss_list)
         scheduler.step() # StepLR
     total_time = time.time() - start_time
-
+    '''
     x = np.array(range(0,args.epochs,1))
     fig, ax1 = plt.subplots() 
   
@@ -123,9 +121,15 @@ def run(args):
     ax2.plot(x, np.array(loss_list), color = 'red') 
     ax2.tick_params(axis ='y', labelcolor = 'red') 
     plt.savefig(args.start + '_plot.png')
-
+    '''
+    output += ("Train accuracy list: {}\n".format(train_acc_list))
+    output += ("Validation accuracy list: {}\n".format(validation_acc_list))
+    output += ("Loss list: {}".format(loss_list))
+    write_to_file(output, args.output_file_name)
     with torch.set_grad_enabled(False): # save memory during inference
-        print('Test accuracy: %.2f%%' % (compute_accuracy(model, test_loader, device=device)))
+        output = ('Test accuracy: %.2f%%\n' % (compute_accuracy(model, test_loader, device=device)))
+        write_to_file(output, args.output_file_name)
+
 
     output += "total training/validation time: {}\n".format(total_time)
     output += "ms per image: {}\n".format(
@@ -139,4 +143,3 @@ def run(args):
 
     if args.save_model == True:
         torch.save(model.state_dict(), args.output_file_name + ".pt")
-    writer.close()
