@@ -66,3 +66,6 @@ def main():
     a1.output_file_name = str(c.outputs) + a1.start
     a1.augmentations = 'edge_padding'
     run(a1)
+
+if __name__ == '__main__':
+    main()
