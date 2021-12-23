@@ -212,5 +212,9 @@ def get_image(image, aug):
         augs = iaa.Sharpen(alpha=(0.0, 1.0), lightness=(0.75, 2.0))
     elif aug == 'aug8': 
         augs = iaa.imgcorruptlike.GaussianNoise(severity=2)
+    elif aug == 'edge_padding':
+        aug = iaa.Sequential([iaa.PadToFixedSize(width=224, height=224, position='center', pad_mode='edge')])
+    elif aug == 'black_padding':
+        aug = iaa.Sequential([iaa.PadToFixedSize(width=224, height=224, position='center')])
     image = augs(images=[image])
     return(np.asarray(image[0], dtype='float32'))
