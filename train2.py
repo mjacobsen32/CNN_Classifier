@@ -38,6 +38,6 @@ def train2(args, model, device, train_loader,
         train_acc = compute_accuracy(model, train_loader, device=device)
         validation_acc_list.append(val_acc)
         train_acc_list.append(train_acc)
-        output = ('Epoch: %03d/%03d | Train: %.3f%%\n' % (
-              epoch, args.epochs, val_acc))
+        output = ('Epoch: %03d/%03d | Train: %.3f%%\n | Validation: %.3f%%\n' % (
+              epoch, args.epochs, train_acc, val_acc))
         write_to_file(output, args.output_file_name)
