@@ -117,8 +117,8 @@ def run(args):
             set_list.append(validation_set)
             validation_set = set_list.pop(0)
             train_set = [item for sublist in set_list for item in sublist]
-        train_loader = torch.utils.data.DataLoader(train_set, **train_kwargs)
-        validation_loader = torch.utils.data.DataLoader(validation_set, **test_kwargs)
+            train_loader = torch.utils.data.DataLoader(train_set, **train_kwargs)
+            validation_loader = torch.utils.data.DataLoader(validation_set, **test_kwargs)
     total_time = time.time() - start_time
     
     output += ("Train accuracy list: {}\n".format(train_acc_list))

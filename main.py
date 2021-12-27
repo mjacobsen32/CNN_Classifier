@@ -58,15 +58,9 @@ def main():
 
     now = str(datetime.datetime.now().strftime("%d_%m_%Y_%H:%M:%S"))
     a1.start = now
-    a1.output_file_name = str(c.outputs) + "StepLR_0.25_10"
-    a1.gamma = 0.25
-    a1.step_size = 10
-    run(a1)
-
-    now = str(datetime.datetime.now().strftime("%d_%m_%Y_%H:%M:%S"))
-    a1.start = now
     a1.output_file_name = str(c.outputs) + "Cross_Validation"
     a1.gamma = 1.0
+    a1.step_size = 40
     a1.cross_validation = True
     run(a1)
 
