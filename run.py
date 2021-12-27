@@ -66,8 +66,19 @@ def run(args):
     output += "Validation dataset length: {}\n".format(len(args.validation_indices))
     output += "Test dataset length: {}\n".format(len(args.test_indices))
 
-    train_set = torch.utils.data.Subset(ds, args.train_indices)
-    validation_set = torch.utils.data.Subset(ds, args.validation_indices) # try using train ds as test ds
+    if args.cross_validation == False:
+        train_set = torch.utils.data.Subset(ds, args.train_indices)
+        validation_set = torch.utils.data.Subset(ds, args.validation_indices) # try using train ds as test ds
+    elif args.cross_validation == True:
+        set1 = torch.utils.data.Subset(ds, range(0,20000,1))
+        set2 = torch.utils.data.Subset(ds, range(20000,40000,1))
+        set3 = torch.utils.data.Subset(ds, range(40000,60000,1))
+        set4 = torch.utils.data.Subset(ds, range(60000,80000,1))
+        set5 = torch.utils.data.Subset(ds, range(80000,100000,1))
+        set_list = [set1,set2,set3,set4,set5]
+        validation_set = set_list.pop(0)
+        train_set = [item for sublist in set_list for item in sublist]
+
 
     train_loader = torch.utils.data.DataLoader(train_set, **train_kwargs)
     validation_loader = torch.utils.data.DataLoader(validation_set, **test_kwargs)
@@ -89,7 +100,7 @@ def run(args):
     loss_fn = get_loss_fn(args.loss, class_weights, args.output_file_name)
 
     output += "Multiplicative factor of learning rate decay: {}\n".format(args.gamma)
-    scheduler = get_lr_sched(args.lr_sched, optimizer, args.gamma, args.output_file_name)
+    scheduler = get_lr_sched(args.lr_sched, optimizer, args.gamma, args.output_file_name, args.step_size)
 
     write_to_file(output, args.output_file_name)
     output = ""
@@ -102,26 +113,14 @@ def run(args):
     for epoch in range(1, args.epochs + 1):
         train2(args, model, device, train_loader, validation_loader, optimizer, epoch, loss_fn, train_acc_list, validation_acc_list, loss_list)
         scheduler.step() # StepLR
+        if args.cross_validation == True:
+            set_list.append(validation_set)
+            validation_set = set_list.pop(0)
+            train_set = [item for sublist in set_list for item in sublist]
+        train_loader = torch.utils.data.DataLoader(train_set, **train_kwargs)
+        validation_loader = torch.utils.data.DataLoader(validation_set, **test_kwargs)
     total_time = time.time() - start_time
-    '''
-    x = np.array(range(0,args.epochs,1))
-    fig, ax1 = plt.subplots() 
-  
-    ax1.set_xlabel('epochs') 
-    ax1.set_ylabel('accuracy', color = 'green') 
-    ax1.plot(x, np.array(train_acc_list), color = 'green') 
-    ax1.plot(x, np.array(validation_acc_list), color = 'blue')
-    ax1.tick_params(axis ='y', labelcolor = 'green') 
-  
-    # Adding Twin Axes
-
-    ax2 = ax1.twinx() 
-  
-    ax2.set_ylabel('loss', color = 'red') 
-    ax2.plot(x, np.array(loss_list), color = 'red') 
-    ax2.tick_params(axis ='y', labelcolor = 'red') 
-    plt.savefig(args.start + '_plot.png')
-    '''
+    
     output += ("Train accuracy list: {}\n".format(train_acc_list))
     output += ("Validation accuracy list: {}\n".format(validation_acc_list))
     output += ("Loss list: {}".format(loss_list))
@@ -135,9 +134,6 @@ def run(args):
     output += "ms per image: {}\n".format(
         total_time / (args.train_length+args.validation_length) / args.epochs
         )
-    #output += "train class count: {}\n".format(args.train_class_count)
-    #output += "test class count: {}\n".format(args.test_class_count)
-    #output += "validation class count: {}\n".format(pred_count)
 
     write_to_file(output, args.output_file_name)
 

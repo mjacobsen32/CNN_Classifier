@@ -157,14 +157,14 @@ def pad_to_224(image):
     return np.asarray(background_image, dtype='uint8')
 
 
-def get_lr_sched(sched_name, optimizer, gamma, output_file):
+def get_lr_sched(sched_name, optimizer, gamma, output_file, step_size):
     output = ""
     if sched_name == "ReduceLROnPlateau":
         scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(
             optimizer, factor=0.1, patience=2, verbose=True
             )
     elif sched_name == "StepLR":
-        scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=3, 
+        scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=step_size, 
                                                     gamma=gamma, verbose=False)
     output += str(scheduler) + '\n'
     write_to_file(information=output, output_file_name=output_file)

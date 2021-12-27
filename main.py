@@ -30,6 +30,7 @@ def main():
     a1.loss = "CEL"
     a1.lr_sched = "StepLR"
     a1.augmentations = "none"
+    a1.cross_validation = False
 
     #a1.subset_indices = get_random_subset(a1.desired_length, DS_LENGTH)
     #a1.train_indices, a1.validation_indices = split(a1.subset_indices, TRAIN_RATIO)
@@ -57,43 +58,16 @@ def main():
 
     now = str(datetime.datetime.now().strftime("%d_%m_%Y_%H:%M:%S"))
     a1.start = now
-    a1.output_file_name = str(c.outputs) + a1.start
-    a1.model = MODEL_LIST[0]
+    a1.output_file_name = str(c.outputs) + "StepLR_0.25_10"
+    a1.gamma = 0.25
+    a1.step_size = 10
     run(a1)
-    #now = str(datetime.datetime.now().strftime("%d_%m_%Y_%H:%M:%S"))
-    #a1.start = now
-    #a1.output_file_name = str(c.outputs) + a1.start
-    #a1.model = MODEL_LIST[2]
-    #run(a1)
-    
-    #now = str(datetime.datetime.now().strftime("%d_%m_%Y_%H:%M:%S"))
-    #a1.start = now
-    #a1.output_file_name = str(c.outputs) + a1.start
-    #a1.model = MODEL_LIST[3]
-    #run(a1)
-    
+
     now = str(datetime.datetime.now().strftime("%d_%m_%Y_%H:%M:%S"))
     a1.start = now
-    a1.output_file_name = str(c.outputs) + a1.start
-    a1.model = MODEL_LIST[4]
-    run(a1)
-    
-    now = str(datetime.datetime.now().strftime("%d_%m_%Y_%H:%M:%S"))
-    a1.start = now
-    a1.output_file_name = str(c.outputs) + a1.start
-    a1.model = MODEL_LIST[5]
-    run(a1)
-    
-    now = str(datetime.datetime.now().strftime("%d_%m_%Y_%H:%M:%S"))
-    a1.start = now
-    a1.output_file_name = str(c.outputs) + a1.start
-    a1.model = MODEL_LIST[6]
-    run(a1)
-    
-    now = str(datetime.datetime.now().strftime("%d_%m_%Y_%H:%M:%S"))
-    a1.start = now
-    a1.output_file_name = str(c.outputs) + a1.start
-    a1.model = MODEL_LIST[7]
+    a1.output_file_name = str(c.outputs) + "Cross_Validation"
+    a1.gamma = 1.0
+    a1.cross_validation = True
     run(a1)
 
 if __name__ == '__main__':

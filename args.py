@@ -32,3 +32,5 @@ class Args:
     validation_class_count = []
     predicted_class_count = []
     start = str
+    step_size = int
+    cross_validation = bool
