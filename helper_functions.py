@@ -216,5 +216,15 @@ def get_image(image, aug):
         aug = iaa.Sequential([iaa.PadToFixedSize(width=224, height=224, position='center', pad_mode='edge')])
     elif aug == 'black_padding':
         aug = iaa.Sequential([iaa.PadToFixedSize(width=224, height=224, position='center')])
+    elif aug == 'resize':
+        aug = iaa.Resize({'height': 224, 'width': 224})
+    elif aug == 'resize_with_pad':
+        width, height = image.shape
+        if width < height:
+            aug = iaa.Sequential([iaa.Resize({'height': 'keep-aspect-ratio', 'width': 224}),
+                                    iaa.CenterPadToFixedSize(width=224,height=224)])
+        else:
+            aug = iaa.Sequential([iaa.Resize({'height': 224, 'width': 'keep-aspect-ratio'}),
+                                    iaa.CenterPadToFixedSize(width=224,height=224)])
     image = augs(images=[image])
     return(np.asarray(image[0], dtype='float32'))

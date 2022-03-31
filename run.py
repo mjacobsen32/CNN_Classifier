@@ -52,15 +52,6 @@ def run(args):
                                    percent=args.percent_data,
                                    dims=args.input_dimension,
                                    augs=args.augmentations)
-    
-    test_ds = PhytoplanktonImageDataset(annotations_file=c.test_csv, 
-                                   img_dir=c.test_images, 
-                                   transform=tf,
-                                   target_transform=None,
-                                   num_classes=args.num_classes,
-                                   percent=args.percent_data,
-                                   dims=args.input_dimension,
-                                   augs=args.augmentations)
 
     output += "Train dataset length: {}\n".format(len(args.train_indices))
     output += "Validation dataset length: {}\n".format(len(args.validation_indices))
@@ -69,6 +60,7 @@ def run(args):
     if args.cross_validation == False:
         train_set = torch.utils.data.Subset(ds, args.train_indices)
         validation_set = torch.utils.data.Subset(ds, args.validation_indices) # try using train ds as test ds
+        test_set = torch.utils.data.Subset(ds, args.test_indices)
     elif args.cross_validation == True:
         set1 = torch.utils.data.Subset(ds, range(0,20000,1))
         set2 = torch.utils.data.Subset(ds, range(20000,40000,1))
@@ -77,12 +69,12 @@ def run(args):
         set5 = torch.utils.data.Subset(ds, range(80000,100000,1))
         set_list = [set1,set2,set3,set4,set5]
         validation_set = set_list.pop(0)
-        train_set = [item for sublist in set_list for item in sublist]
+        train_set = torch.utils.data.ConcatDataset(set_list)
 
 
     train_loader = torch.utils.data.DataLoader(train_set, **train_kwargs)
     validation_loader = torch.utils.data.DataLoader(validation_set, **test_kwargs)
-    test_loader = torch.utils.data.DataLoader(test_ds, **test_kwargs)
+    test_loader = torch.utils.data.DataLoader(test_set, **test_kwargs)
 
     model = get_model(model_name=args.model, 
                       num_classes=args.num_classes, 
