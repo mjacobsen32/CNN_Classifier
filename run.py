@@ -23,7 +23,7 @@ os.environ['CUDA_LAUNCH_BLOCKING'] = "1"
 
 # ------------ Driver ------------
 def run(args):
-    output = ""
+    output = args.return_all()
 
     use_cuda = not args.no_cuda and torch.cuda.is_available()
     torch.manual_seed(args.seed)
@@ -45,7 +45,7 @@ def run(args):
     ])
 
     ds = PhytoplanktonImageDataset(annotations_file=c.complete_csv, 
-                                   img_dir=c.complete_images, 
+                                   img_dir=args.images_folder, 
                                    transform=tf,
                                    target_transform=None,
                                    num_classes=args.num_classes,
@@ -112,13 +112,15 @@ def run(args):
             train_loader = torch.utils.data.DataLoader(train_set, **train_kwargs)
             validation_loader = torch.utils.data.DataLoader(validation_set, **test_kwargs)
     total_time = time.time() - start_time
-    
+    write_to_file(output, args.output_file_name)
+    output = ""
     output += ("Train accuracy list: {}\n".format(train_acc_list))
     output += ("Validation accuracy list: {}\n".format(validation_acc_list))
     output += ("Loss list: {}".format(loss_list))
-    write_to_file(output, args.output_file_name)
+    write_to_file(output, args.output_file_name+'_lists')
+    output = ""
     with torch.set_grad_enabled(False): # save memory during inference
-        output = ('Test accuracy: %.2f%%\n' % (compute_accuracy(model, test_loader, device=device)))
+        output = ('Test accuracy: %.2f%%\n' % (compute_accuracy(model, test_loader, device=device, test_bool=True, output_file_name=args.output_file_name)))
         write_to_file(output, args.output_file_name)
 
 
