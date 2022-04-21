@@ -24,19 +24,17 @@ class PhytoplanktonImageDataset(Dataset):
   
 
     def __getitem__(self, idx):
-        img_path = os.path.join(self.img_dir, get_sub_dir(self.img_labels.iloc[idx, 0]),self.img_labels.iloc[idx, 0]) # image path
-        image = get_image(np.array(PIL.Image.open(img_path).convert('RGB'), dtype=np.uint8), self.augs)
-        #image = np.array(PIL.Image.open(img_path).convert('RGB'), dtype=np.float32)
+        img_path = os.path.join(self.img_dir, get_sub_dir(self.img_labels.iloc[idx, 0]), self.img_labels.iloc[idx, 0]) # image path
+        #image = get_image(np.array(PIL.Image.open(img_path).convert('RGB'), dtype=np.uint8), self.augs)
+        image = np.array(PIL.Image.open(img_path).convert('RGB'), dtype=np.float32)
         # no longer using .convert('RGB')
         classification = self.img_labels.iloc[idx,1] # getting label from csv
-        label = (classification - 1)
-        if self.num_classes == 2:
-            if classification == 65: # Detritus vs. non detritus
-                label = 0
-            else:
-                label = 1
+        if classification == 65: # Detritus vs. non detritus
+            label = 0
+        else:
+            label = 1
         if self.transform:
             image = self.transform(image)
         if self.target_transform:
             label = self.target_transform(label)
-        return image, label
+        return image, label, classification

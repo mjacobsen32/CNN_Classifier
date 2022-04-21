@@ -20,10 +20,10 @@ import torchvision.models as models
 
 
 def get_model(model_name, num_classes, device, dims, output_file):
-    output = ""
-    output += "Input dimensions: {} X {}\n".format(dims, dims)
-    output += "Output dimension: {}\n".format(num_classes)
-    output += "Model: {}\n".format(model_name)
+    #output = ""
+    #output += "Input dimensions: {} X {}\n".format(dims, dims)
+    #output += "Output dimension: {}\n".format(num_classes)
+    #output += "Model: {}\n".format(model_name)
     if model_name == "AlexNet":
         nn = models.alexnet(num_classes=num_classes).to(device)
     elif model_name == 'DConvNetV2':
@@ -38,16 +38,16 @@ def get_model(model_name, num_classes, device, dims, output_file):
         nn = models.resnet50(num_classes=num_classes).to(device)
     elif model_name == 'VGG13':
         nn = models.vgg13(num_classes=num_classes).to(device)
-    output += (str(nn)+'\n')
-    write_to_file(information=output, output_file_name=output_file)
+    #output += (str(nn)+'\n')
+    #write_to_file(information=output, output_file_name=output_file)
     return(nn)
 
 
 def get_optimizer(opt_name, lr, params, weight_decay, output_file):
-    output = ""
-    output += "Optimizer: {}+'\n'".format(opt_name)
-    output += "Learning rate: {}\n".format(lr)
-    write_to_file(information=output, output_file_name=output_file)
+    #output = ""
+    #output += "Optimizer: {}+'\n'".format(opt_name)
+    #output += "Learning rate: {}\n".format(lr)
+    #write_to_file(information=output, output_file_name=output_file)
     if opt_name == "AdaDelta":
         return(optim.Adadelta(params))
     elif opt_name == "Adam":
@@ -158,7 +158,7 @@ def pad_to_224(image):
 
 
 def get_lr_sched(sched_name, optimizer, gamma, output_file, step_size):
-    output = ""
+    #output = ""
     if sched_name == "ReduceLROnPlateau":
         scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(
             optimizer, factor=0.1, patience=2, verbose=True
@@ -166,16 +166,16 @@ def get_lr_sched(sched_name, optimizer, gamma, output_file, step_size):
     elif sched_name == "StepLR":
         scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=step_size, 
                                                     gamma=gamma, verbose=False)
-    output += str(scheduler) + '\n'
-    write_to_file(information=output, output_file_name=output_file)
+    #output += str(scheduler) + '\n'
+    #write_to_file(information=output, output_file_name=output_file)
     return(scheduler)
 
 
 def get_loss_fn(loss_name, class_weights,output_file):
-    output = ""
-    output += "Loss function: {}+'\n'".format(loss_name)
-    output += "class weights: {}+'\n'".format(class_weights)
-    write_to_file(output, output_file)
+    #output = ""
+    #output += "Loss function: {}+'\n'".format(loss_name)
+    #output += "class weights: {}+'\n'".format(class_weights)
+    #write_to_file(output, output_file)
     if loss_name == "nll_loss":
         return(torch.functional.nll_loss)
     elif loss_name == "MSELoss":

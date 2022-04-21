@@ -1,7 +1,9 @@
 complete_images = "../data/115k_padded/"
+base_path = "/scratch/"
 complete_images_no_padd = "../data/115k"
 complete_csv = "../data/115k.csv"
 tb_parent_dir = "../results/plots/"
 outputs = "../results/outputs/"
+original_path = '../data/115k/'
 #test_csv = "../data/test_15k.csv"
 #test_images = "../data/test_15k_padded/"
