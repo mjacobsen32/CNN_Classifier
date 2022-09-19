@@ -1,66 +1,42 @@
-class Args:
-    train_indices = [int]
-    validation_indices = [int]
-    test_indices = [int]
-    train_length = int
-    validation_length = int
-    test_length = int
-    batch_size = int
-    test_batch_size = int
-    epochs = int
-    lr = float
-    gamma = float
-    #log_interval = int
-    num_classes = int
-    optimizer = str
-    model = str
-    #percent_data = int
-    loss = str
-    #input_dimension = int
-    lr_sched = str
-    save_model = bool
-    no_cuda = bool
-    dry_run = bool
-    seed = int
-    augmentations = str
-    class_weights = []
-    output_file_name = str
-    #tb_dir = str
-    #index_file = str
-    train_class_count = []
-    validation_class_count = []
-    predicted_class_count = []
-    start = str
-    step_size = int
-    #cross_validation = bool
-    images_folder = str
+import argparse
 
-    def return_all(self):
-        output = ""
-        output += self.train_length
-        output += self.validation_length
-        output += self.test_length
-        output += self.batch_size
-        output += self.test_batch_size
-        output += self.epochs
-        output += self.lr
-        output += self.gamma
-        output += self.num_classes
-        output += self.optimizer
-        output += self.model
-        output += self.loss
-        output += self.lr_sched
-        output += self.save_model
-        output += self.no_cuda
-        output += self.dry_run
-        output += self.seed
-        output += self.augmentations
-        output += self.class_weights
-        output += self.output_file_name
-        output += self.train_class_count
-        output += self.validation_class_count
-        output += self.predicted_class_count
-        output += self.start
-        output += self.step_size
-        output += self.images_folder
-        return(output)
+parser = argparse.ArgumentParser(description='ConvNet model creation arguments')
+
+parser.add_argument(
+    '-b', '--batch_size',
+    choices=(16,32,64,128,256),
+    required=False,
+    type=int,
+    default=64,
+    help="Train and test batch size",)
+
+parser.add_argument(
+    '-o', '--optim',
+    choices=("Adam"),
+    required=False,
+    type=str,
+    default="Adam",
+    help="Optimization function")
+
+parser.add_argument(
+    '-l', '--loss',
+    choices=("CEL"),
+    required=False,
+    type=str,
+    default="CEL",
+    help="Loss function")
+
+parser.add_argument(
+    '-lr', '--learning_rate',
+    required=False,
+    type=int,
+    default=0.001,
+    help="Learning rate")
+
+parser.add_argument(
+    '-s', '--scheduler',
+    choices=("ROP", "Step"),
+    required=False,
+    type=str,
+    default="ROP",
+    help="Learning rate scheduler. Supported schedulers are ReduceOnPlateau 'ROP' and StepLR 'Step' ")
