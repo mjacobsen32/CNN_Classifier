@@ -3,12 +3,19 @@ import argparse
 parser = argparse.ArgumentParser(description='ConvNet model creation arguments')
 
 parser.add_argument(
+    '-c', '--constants',
+    required=False,
+    type=str,
+    default='scatterPlotConstants',
+    help="Constants to use for model creation")
+
+parser.add_argument(
     '-b', '--batch_size',
     choices=(16,32,64,128,256),
     required=False,
     type=int,
     default=64,
-    help="Train and test batch size",)
+    help="Train and test batch size")
 
 parser.add_argument(
     '-o', '--optim',
@@ -69,3 +76,10 @@ parser.add_argument(
     type=str,
     default="GoogLeNet",
     help="Model architecture. Options: ('AlexNet', 'GoogLeNet', 'ResNet50'). Default = 'GoogLeNet")
+
+parser.add_argument(
+    '-d', '--device',
+    required=False,
+    type=str,
+    default='cuda',
+    help="Memory device for model: 'cuda' GPU or 'cpu'. Default = 'cuda'")

@@ -1,6 +1,4 @@
-from macpath import split
 from torch.utils.data import Dataset
-from helper_functions import get_sub_dir
 import PIL
 import os
 import numpy as np
