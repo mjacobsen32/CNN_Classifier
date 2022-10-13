@@ -1,12 +1,10 @@
+from unittest import loader
 import torch
 import torchvision
 from .base_model import BaseModel
 from math import floor
 import time
-from sklearn.metrics import confusion_matrix
-from sklearn.metrics import precision_recall_fscore_support
-from sklearn.metrics import balanced_accuracy_score
-from sklearn.metrics import roc_auc_score
+import sklearn.metrics as metrics
 
 
 class Model(BaseModel):
@@ -22,10 +20,9 @@ class Model(BaseModel):
         self.train_loader = None
         self.val_loader = None
         self.test_loader = None
-        self.loss_list = []
         self.train_accuracy_list = []
         self.validation_accuracy_list = []
-        self.labels = ['one', 'two', 'three']
+        self.loss_list = []
 
 
     def save_model(self, path_to_save):
@@ -49,83 +46,90 @@ class Model(BaseModel):
                 print('Epoch: %d/%d | Batch: %4d/%4d | Loss: %.4f\n'%(
                     epoch, total, batch_idx, len(self.train_loader), loss))
 
+    def predictions(self, loader):
+        y_pred = []
+        y_true = []
+        for features, targets in loader:
+            features, targets = features.to(self.device), targets.to(self.device)
+            _, predicted_labels = torch.max(self.model(features), 1)
+            y_pred.append(predicted_labels)
+            y_true.append(targets)
+        return y_true, y_pred
+    
 
-    def confusion_matrix(self):
-        print(confusion_matrix(y_true, y_pred, self.labels))
-
-    def accuracy(self):
-        balanced_accuracy_score(y_true, y_pred)
-
-    def roc_auc(self):
-        print(roc_auc_score(y_true=y_true, y_score=y_score, average='weighted'))
-
-    def prec_rec_f_supp(self):
-        print(precision_recall_fscore_support(y_true, y_pred, average='macro'))
-
-    def class_report(self):
-        print()
-
-    def plot_roc_auc(self):
-        pass
-
-    def compute_accuracy(self, test=False,)
+    def compute_accuracy(self, loader):
+        y_true, y_pred = self.predictions(loader=loader)
+        return metrics.balanced_accuracy_score(y_true=y_true, y_score=y_pred)
 
 
     def train(self, epochs):
         start_time = time.time()
         for epoch in range(epochs):
-            self.train_epoch(epoch, total)
-            self.train_accuracy_list.append(self.compute_accuracy(set=self.train_loader))
-            self.validation_accuracy_list.append(self.compute_accuracy(set=self.val_loader))
+            self.train_epoch(epoch, epochs)
+            self.scheduler.step()
+            self.model.eval()
+            with torch.set_grad_enabled(False):
+                self.train_accuracy_list.append(self.compute_accuracy(set=self.train_loader))
+                self.validation_accuracy_list.append(self.compute_accuracy(set=self.val_loader))
+            print('Epoch: %03d/%03d | Train: %.3f%% | Validation: %.3f%%\n' % (
+              epoch, epochs, self.train_accuracy_list[-1] , self.validation_accuracy_list[-1]))
+        total_time = time.time() - start_time
 
 
     def validation(self):
         pass
 
     def test(self):
-        pass
+        self.model.eval()
+        with torch.set_grad_enabled(False):
+            y_true, y_pred = self.predictions(loader=self.test_loader)
+            print(metrics.confusion_matrix(y_true=y_true, y_score=y_pred, labels=self.labels))
+            print(metrics.balanced_accuracy_score(y_true=y_true, y_score=y_pred))
+            print(metrics.roc_auc_score(y_true=y_true, y_score=y_pred, average='weighted'))
+            print(metrics.precision_recall_fscore_support(y_true=y_true, y_score=y_pred, average='macro'))
+        
 
-    def subsets(self, kwargs):
+    def set_subsets(self, kwargs):
         self.train_loader = torch.utils.data.DataLoader(self.train_set, **kwargs)
-        self.validation_loader = torch.utils.data.DataLoader(self.validation_set, **kwargs)
+        self.validation_loader = torch.utils.data.DataLoader(self.val_set, **kwargs)
         self.test_loader = torch.utils.data.DataLoader(self.test_set, **kwargs)
 
-    def weights(self):
+    def get_weights(self):
         w = 1 / self.num_classes
-        return [w for _ in range(0, self.num_classes)] # for now all weights are the same
+        return torch.tensor([w for _ in range(0, self.num_classes)]).to(self.device) # for now all weights are the same
 
-    def subset_inds(self, train, _, test):
+    def set_subset_indices(self, train, validation, test):
         train_len = floor(len(self.dataset) * train)
         test_len = floor(len(self.dataset) * test)
-        val_len = len(self.dataset) - self.train_len - self.test_len
+        val_len = len(self.dataset) - train_len - test_len
         self.train_set = torch.utils.data.Subset(self.dataset, range(0, train_len)) 
         self.val_set = torch.utils.data.Subset(self.dataset, range(train_len, train_len+val_len))
         self.test_set = torch.utils.data.Subset(self.dataset, range(train_len+val_len, len(self.dataset)))
 
-    def loss_func(self, loss_str):
+    def set_loss_func(self, loss_str):
         if loss_str == "MSELoss":
-            self.loss_func =torch.nn.MSELoss()
+            self.loss_func = torch.nn.MSELoss()
         elif loss_str == "CEL":
-            self.loss_func =torch.nn.CrossEntropyLoss(weight=self.get_weights(),
+            self.loss_func = torch.nn.CrossEntropyLoss(weight=self.get_weights(),
                                             reduction='sum')
         elif loss_str == "BCE":
-            self.loss_func =torch.nn.BCELoss()
+            self.loss_func = torch.nn.BCELoss()
         elif loss_str == "BCEL":
-            self.loss_func =torch.nn.BCEWithLogitsLoss()
+            self.loss_func = torch.nn.BCEWithLogitsLoss()
 
-    def optimization_func(self, opt_str, lr):
+    def set_optimization_func(self, opt_str, lr):
         if opt_str == "AdaDelta":
             self.optimizer = torch.optim.Adadelta(self.model.parameters())
         elif opt_str == "Adam":
-            self.optimizertorch.optim.Adam(self.model.parameters(), lr)
+            self.optimizer = torch.optim.Adam(self.model.parameters(), lr)
         elif opt_str == "SGD":
-            self.optimizertorch.optim.SGD(self.model.parameters(), lr)
+            self.optimizer = torch.optim.SGD(self.model.parameters(), lr)
         elif opt_str == "RProp":
-            self.optimizertorch.optim.Rprop(self.model.parameters())
+            self.optimizer = torch.optim.Rprop(self.model.parameters())
         elif opt_str == "AdaGrad":
-            self.optimizertorch.optim.Adagrad(self.model.parameters())
+            self.optimizer = torch.optim.Adagrad(self.model.parameters())
 
-    def lr_sched(self, sched_str, gamma, step_size):
+    def set_lr_sched(self, sched_str, gamma, step_size):
         if sched_str == "ReduceLROnPlateau":
             self.scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(
                 self.optimizer, factor=0.1, patience=2, verbose=True)

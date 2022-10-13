@@ -29,12 +29,13 @@ def main():
 
     dataset = Dataset(constants.csv_path, constants.images_path, tf, None)
     model = Model(args.device, args.model, constants.num_classes, dataset)
-    model.loss_func(args.loss)
-    model.optimization_func(args.optim, args.learning_rate)
-    model.lr_sched(args.scheduler, args.gamma, args.step_size)
-    model.dataset_lengths(train=0.80, validation=0.20, test=0.0)
-    model.subsets(modelLoaderKwargs)
+    model.set_loss_func(args.loss)
+    model.set_optimization_func(args.optim, args.learning_rate)
+    model.set_lr_sched(args.scheduler, args.gamma, args.step_size)
+    model.set_subset_indices(train=0.70, validation=0.15, test=0.15)
+    model.set_subsets(modelLoaderKwargs)
     model.train(args.epochs)
+    model.test()
 
 
 

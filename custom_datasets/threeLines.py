@@ -1,8 +1,10 @@
 from torch.utils.data import Dataset
-import PIL
+from torchvision.io import read_image
 import os
 import numpy as np
 import pandas as pd
+import PIL
+import matplotlib.pyplot as plt
 
 
 # ------------ Costum Dataset Class ------------
@@ -18,12 +20,14 @@ class ThreeLinesScatterPlot(Dataset):
   
     def __getitem__(self, idx):
         split_sub_dir = self.img_labels.iloc[idx,0].split('_')
-        sub_dir = split_sub_dir[0] + '_' + split_sub_dir[1]
+        sub_dir = split_sub_dir[0]
         img_path = os.path.join(self.img_dir, sub_dir, self.img_labels.iloc[idx, 0]) # image path
-        image = np.array(PIL.Image.open(img_path), dtype=np.float32)
-        classification = self.img_labels.iloc[idx,1]
+
+        image = np.array(PIL.Image.open(img_path).convert('RGB'), dtype=np.float32)
+        label = self.img_labels.iloc[idx,1]
+        
         if self.transform:
             image = self.transform(image)
         if self.target_transform:
             label = self.target_transform(label)
-        return image, label, classification
+        return image, label
