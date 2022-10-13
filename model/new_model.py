@@ -1,4 +1,3 @@
-from unittest import loader
 import torch
 import torchvision
 from .base_model import BaseModel
@@ -12,6 +11,7 @@ class Model(BaseModel):
         BaseModel.__init__(self, device_str, model_name, num_classes, ds)
         self.weights = []
         self.loss_func = None
+        self.optimizer = None
         self.lr_sched = None
         self.train_set = []
         self.val_set = []
