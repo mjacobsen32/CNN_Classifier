@@ -1,4 +1,3 @@
-from unittest import loader
 import torch
 import torchvision
 from .base_model import BaseModel
@@ -12,7 +11,7 @@ class Model(BaseModel):
         BaseModel.__init__(self, device_str, model_name, num_classes, ds)
         self.weights = []
         self.loss_func = None
-        self.optim_func = None
+        self.optimizer = None
         self.lr_sched = None
         self.train_set = []
         self.val_set = []
@@ -37,9 +36,9 @@ class Model(BaseModel):
 
             logits = self.model(features)
             loss = self.loss_func(logits, targets)
-            self.optim_func.zero_grad()
+            self.optimizer.zero_grad()
             loss.backward()
-            self.optim_func.step()
+            self.optimizer.step()
             self.loss_list.append(loss)
 
             if not batch_idx % 50:
