@@ -32,7 +32,7 @@ def main():
     model.set_loss_func(args.loss)
     model.set_optimization_func(args.optim, args.learning_rate)
     model.set_lr_sched(args.scheduler, args.gamma, args.step_size)
-    model.set_subset_indices(train=0.70, validation=0.15, test=0.15)
+    model.set_subset_indices(train=0.10, validation=0.05, test=0.05)
     model.set_subsets(modelLoaderKwargs)
     model.train(args.epochs)
     model.test()

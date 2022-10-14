@@ -1,5 +1,5 @@
-csv_path = '/scatch/scatterplots/csv_files/ThreeLineClassification.csv'
-images_path = '/scratch/scatterplots'
+csv_path = '/scratch/scatterplots/ThreeLineClassification.csv'
+images_path = '/scratch/scatterplots/scatterplots'
 output_folder = './outputs/scatterplots'
 save_model_path = './trained_models/scatterplots'
 num_classes = 3
