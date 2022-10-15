@@ -103,10 +103,7 @@ class Model(BaseModel):
         train_len = floor(len(self.dataset) * train)
         test_len = floor(len(self.dataset) * test)
         val_len = floor(len(self.dataset) * validation)
-        self.train_set = torch.utils.data.Subset(self.dataset, range(0, train_len)) 
-        self.val_set = torch.utils.data.Subset(self.dataset, range(train_len, train_len+val_len))
-        self.test_set = torch.utils.data.Subset(self.dataset, range(train_len+val_len, train_len+val_len+test_len))
-        print("Train Length: {}\nValidation Length: {}\nTest Length: {}".format(train_len,val_len,test_len))
+        self.train_set, self.val_set, self.test_set = torch.utils.data.random_split(dataset=self.dataset, lengths=[train_len, val_len, test_len])
 
     def set_loss_func(self, loss_str):
         if loss_str == "MSELoss":
