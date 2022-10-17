@@ -3,6 +3,8 @@ from model.args import parser
 from custom_datasets import phytoplankton, threeLines
 from constants import planktonConstants, scatterPlotConstants
 from torchvision import transforms
+from model.plotting import Plots
+import os
 
 def main():
     args = parser.parse_args()
@@ -32,10 +34,17 @@ def main():
     model.set_loss_func(args.loss)
     model.set_optimization_func(args.optim, args.learning_rate)
     model.set_lr_sched(args.scheduler, args.gamma, args.step_size)
-    model.set_subset_indices(train=0.10, validation=0.05, test=0.05)
+    model.set_subset_indices(train=0.70, validation=0.15, test=0.15)
     model.set_subsets(modelLoaderKwargs)
     model.train(args.epochs)
     model.test()
+    model.results(constants.output_folder)
+
+    Plots.plot_val_acc_loss(model.loss_list, model.validation_accuracy_list)
+    
+    
+    if args.save_model:
+        model.save_model(constants.save_model_path)
 
 
 
