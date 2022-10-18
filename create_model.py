@@ -4,7 +4,7 @@ from custom_datasets import phytoplankton, threeLines
 from constants import planktonConstants, scatterPlotConstants
 from torchvision import transforms
 from model.plotting import Plots
-import os
+import os, shutil
 
 def main():
     args = parser.parse_args()
@@ -16,6 +16,18 @@ def main():
     elif c == 'planktonConstants':
         from custom_datasets.phytoplankton import PhytoplanktonDataset as Dataset
         import constants.planktonConstants as constants
+
+    try:
+        p = os.path.join(constants.output_folder, args.output_folder)
+        os.mkdir(p)
+    except:
+        print("{} already exists!\nRetype '{}' to overwrite, press enter to exit".format(p, args.output_folder))
+        new_folder = input()
+        if new_folder == args.output_folder:
+            shutil.rmtree(p)
+            os.mkdir(p)
+        else:
+            return
 
     tf = transforms.Compose([
         transforms.ToTensor(),
@@ -36,15 +48,16 @@ def main():
     model.set_lr_sched(args.scheduler, args.gamma, args.step_size)
     model.set_subset_indices(train=0.70, validation=0.15, test=0.15)
     model.set_subsets(modelLoaderKwargs)
+    model.write_parameters(os.path.join(constants.output_folder, args.output_folder))
     model.train(args.epochs)
     model.test()
-    model.results(constants.output_folder)
+    model.results(os.path.join(constants.output_folder, args.output_folder))
 
     Plots.plot_val_acc_loss(model.loss_list, model.validation_accuracy_list)
-    
+
     
     if args.save_model:
-        model.save_model(constants.save_model_path)
+        model.save_model(args.output_folder)
 
 
 

@@ -3,6 +3,13 @@ import argparse
 parser = argparse.ArgumentParser(description='ConvNet model creation arguments')
 
 parser.add_argument(
+    '-out', '--output_folder',
+    required=True,
+    type=str,
+    help="String of output folder to save all information of model train and test"
+)
+
+parser.add_argument(
     '-c', '--constants',
     required=False,
     type=str,
@@ -53,7 +60,7 @@ parser.add_argument(
     required=False,
     type=int,
     default=10,
-    help="Epoch at which to adjust learning rate by gamme. Only used if StepLR is used as the learning rate scheduler. Default = 10")
+    help="Epoch at which to adjust learning rate by gamma. Only used if StepLR is used as the learning rate scheduler. Default = 10")
 
 parser.add_argument(
     '-g', '--gamma',

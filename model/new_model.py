@@ -1,10 +1,10 @@
 import torch
-import torchvision
 from .base_model import BaseModel
 from math import floor
 import time
 import sklearn.metrics as metrics
 import numpy as np
+import os
 
 
 class Model(BaseModel):
@@ -26,8 +26,16 @@ class Model(BaseModel):
         self.labels = [0, 1, 2]
 
 
+    def write_parameters(self, output_folder):
+        f = open(os.path.join(output_folder, 'output.txt'), "w")
+        f.write(self.model)
+        f.write(self.loss_func)
+        f.write(self.optimizer)
+        f.write(self.scheduler)
+        f.close()
+
     def save_model(self, path_to_save):
-        torch.save(self.model.state_dict(), path_to_save)
+        torch.save(self.model.state_dict(), os.path.join(path_to_save,'model.pth'))
 
     def train_epoch(self, epoch, total):
         self.model.train()
@@ -76,19 +84,20 @@ class Model(BaseModel):
               epoch+1, epochs, self.train_accuracy_list[-1] , self.validation_accuracy_list[-1]))
         total_time = time.time() - start_time
 
-
-    def validation(self):
-        pass
-
     def test(self):
         self.model.eval()
         with torch.set_grad_enabled(False):
             y_true, y_pred = self.predictions(loader=self.test_loader)
-            print(metrics.confusion_matrix(y_true=y_true, y_pred=y_pred, labels=self.labels))
-            print(metrics.balanced_accuracy_score(y_true=y_true, y_pred=y_pred))
-            #print(metrics.roc_auc_score(y_true=y_true, y_pred=y_pred, average='weighted'))
-            print(metrics.precision_recall_fscore_support(y_true=y_true, y_pred=y_pred, average='macro'))
-        
+    
+    
+    def results(self, outputFolder):
+        f = open(os.path.join(outputFolder, 'output.txt'), "a")
+        f.write(metrics.confusion_matrix(y_true=y_true, y_pred=y_pred, labels=self.labels))
+        f.write(metrics.balanced_accuracy_score(y_true=y_true, y_pred=y_pred))
+        #f.write(metrics.roc_auc_score(y_true=y_true, y_pred=y_pred, average='weighted'))
+        f.write(metrics.precision_recall_fscore_support(y_true=y_true, y_pred=y_pred, average='macro'))
+        f.close()
+
 
     def set_subsets(self, kwargs):
         self.train_loader = torch.utils.data.DataLoader(self.train_set, **kwargs)
