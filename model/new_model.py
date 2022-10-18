@@ -4,6 +4,7 @@ from .base_model import BaseModel
 from math import floor
 import time
 import sklearn.metrics as metrics
+import numpy as np
 
 
 class Model(BaseModel):
@@ -12,7 +13,7 @@ class Model(BaseModel):
         self.weights = []
         self.loss_func = None
         self.optimizer = None
-        self.lr_sched = None
+        self.scheduler = None
         self.train_set = []
         self.val_set = []
         self.test_set = []
@@ -22,6 +23,7 @@ class Model(BaseModel):
         self.train_accuracy_list = []
         self.validation_accuracy_list = []
         self.loss_list = []
+        self.labels = [0, 1, 2]
 
 
     def save_model(self, path_to_save):
@@ -41,9 +43,9 @@ class Model(BaseModel):
             self.optimizer.step()
             self.loss_list.append(loss)
 
-            if not batch_idx % 50:
+            if not batch_idx % 5:
                 print('Epoch: %d/%d | Batch: %4d/%4d | Loss: %.4f\n'%(
-                    epoch, total, batch_idx, len(self.train_loader), loss))
+                    epoch+1, total, batch_idx, len(self.train_loader), loss))
 
     def predictions(self, loader):
         y_pred = []
@@ -51,27 +53,27 @@ class Model(BaseModel):
         for features, targets in loader:
             features, targets = features.to(self.device), targets.to(self.device)
             _, predicted_labels = torch.max(self.model(features), 1)
-            y_pred.append(predicted_labels)
-            y_true.append(targets)
+            y_pred += torch.Tensor.cpu(predicted_labels).tolist()
+            y_true += torch.Tensor.cpu(targets).tolist()
         return y_true, y_pred
     
 
     def compute_accuracy(self, loader):
         y_true, y_pred = self.predictions(loader=loader)
-        return metrics.balanced_accuracy_score(y_true=y_true, y_score=y_pred)
+        return metrics.balanced_accuracy_score(y_true=y_true, y_pred=y_pred)
 
 
     def train(self, epochs):
         start_time = time.time()
         for epoch in range(epochs):
             self.train_epoch(epoch, epochs)
-            self.scheduler.step()
+            self.scheduler.step(metrics=self.loss_list[-1])
             self.model.eval()
             with torch.set_grad_enabled(False):
-                self.train_accuracy_list.append(self.compute_accuracy(set=self.train_loader))
-                self.validation_accuracy_list.append(self.compute_accuracy(set=self.val_loader))
-            print('Epoch: %03d/%03d | Train: %.3f%% | Validation: %.3f%%\n' % (
-              epoch, epochs, self.train_accuracy_list[-1] , self.validation_accuracy_list[-1]))
+                self.train_accuracy_list.append(self.compute_accuracy(loader=self.train_loader))
+                self.validation_accuracy_list.append(self.compute_accuracy(loader=self.val_loader))
+            print('Epoch: %03d/%03d | Train: %0.3f%% | Validation: %3f%%\n' % (
+              epoch+1, epochs, self.train_accuracy_list[-1] , self.validation_accuracy_list[-1]))
         total_time = time.time() - start_time
 
 
@@ -82,15 +84,15 @@ class Model(BaseModel):
         self.model.eval()
         with torch.set_grad_enabled(False):
             y_true, y_pred = self.predictions(loader=self.test_loader)
-            print(metrics.confusion_matrix(y_true=y_true, y_score=y_pred, labels=self.labels))
-            print(metrics.balanced_accuracy_score(y_true=y_true, y_score=y_pred))
-            print(metrics.roc_auc_score(y_true=y_true, y_score=y_pred, average='weighted'))
-            print(metrics.precision_recall_fscore_support(y_true=y_true, y_score=y_pred, average='macro'))
+            print(metrics.confusion_matrix(y_true=y_true, y_pred=y_pred, labels=self.labels))
+            print(metrics.balanced_accuracy_score(y_true=y_true, y_pred=y_pred))
+            #print(metrics.roc_auc_score(y_true=y_true, y_pred=y_pred, average='weighted'))
+            print(metrics.precision_recall_fscore_support(y_true=y_true, y_pred=y_pred, average='macro'))
         
 
     def set_subsets(self, kwargs):
         self.train_loader = torch.utils.data.DataLoader(self.train_set, **kwargs)
-        self.validation_loader = torch.utils.data.DataLoader(self.val_set, **kwargs)
+        self.val_loader = torch.utils.data.DataLoader(self.val_set, **kwargs)
         self.test_loader = torch.utils.data.DataLoader(self.test_set, **kwargs)
 
     def get_weights(self):
@@ -100,10 +102,8 @@ class Model(BaseModel):
     def set_subset_indices(self, train, validation, test):
         train_len = floor(len(self.dataset) * train)
         test_len = floor(len(self.dataset) * test)
-        val_len = len(self.dataset) - train_len - test_len
-        self.train_set = torch.utils.data.Subset(self.dataset, range(0, train_len)) 
-        self.val_set = torch.utils.data.Subset(self.dataset, range(train_len, train_len+val_len))
-        self.test_set = torch.utils.data.Subset(self.dataset, range(train_len+val_len, len(self.dataset)))
+        val_len = floor(len(self.dataset) * validation)
+        self.train_set, self.val_set, self.test_set = torch.utils.data.random_split(dataset=self.dataset, lengths=[train_len, val_len, test_len])
 
     def set_loss_func(self, loss_str):
         if loss_str == "MSELoss":
@@ -129,10 +129,10 @@ class Model(BaseModel):
             self.optimizer = torch.optim.Adagrad(self.model.parameters())
 
     def set_lr_sched(self, sched_str, gamma, step_size):
-        if sched_str == "ReduceLROnPlateau":
+        if sched_str == "ROP":
             self.scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(
                 self.optimizer, factor=0.1, patience=2, verbose=True)
-        elif sched_str == "StepLR":
+        elif sched_str == "Step":
             self.scheduler = torch.optim.lr_scheduler.StepLR(self.optimizer, step_size=step_size, 
                                                         gamma=gamma, verbose=False)
         

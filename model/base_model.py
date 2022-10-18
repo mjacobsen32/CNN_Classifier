@@ -3,7 +3,8 @@ import torchvision.models as models
 
 class BaseModel:
     def __init__(self, device_str, model_name, num_classes, ds):
-        use_cuda = not device_str and torch.cuda.is_available()
+        use_cuda = (torch.cuda.is_available() and device_str == 'cuda')
+        print("use_cuda: {}".format(use_cuda))
         self.device = torch.device("cuda" if use_cuda else "cpu") # Either 'Cuda' or 'CPU' (GPU or CPU usage)
         self.model = self.get_model(model_name, num_classes) # Creating model: To be loaded from model dict
                                                     # or created from scratch with seed 

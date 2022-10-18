@@ -3,6 +3,8 @@ from model.args import parser
 from custom_datasets import phytoplankton, threeLines
 from constants import planktonConstants, scatterPlotConstants
 from torchvision import transforms
+from model.plotting import Plots
+import os
 
 def main():
     args = parser.parse_args()
@@ -36,6 +38,13 @@ def main():
     model.set_subsets(modelLoaderKwargs)
     model.train(args.epochs)
     model.test()
+    model.results(constants.output_folder)
+
+    Plots.plot_val_acc_loss(model.loss_list, model.validation_accuracy_list)
+    
+    
+    if args.save_model:
+        model.save_model(constants.save_model_path)
 
 
 

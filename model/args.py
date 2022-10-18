@@ -83,3 +83,11 @@ parser.add_argument(
     type=str,
     default='cuda',
     help="Memory device for model: 'cuda' GPU or 'cpu'. Default = 'cuda'")
+
+parser.add_argument(
+    '-sm', '--save_model',
+    required=False,
+    type=bool,
+    default=False,
+    help="Save-model as state dict (bool)"
+)
