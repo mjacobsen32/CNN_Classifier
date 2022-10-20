@@ -24,14 +24,17 @@ class Model(BaseModel):
         self.validation_accuracy_list = []
         self.loss_list = []
         self.labels = [0, 1, 2]
+        self.total_time = 0.0
+        self.y_true = []
+        self.y_pred = []
 
 
-    def write_parameters(self, output_folder):
+    def write_parameters(self, output_folder, model, loss, optim, sched):
         f = open(os.path.join(output_folder, 'output.txt'), "w")
-        f.write(self.model)
-        f.write(self.loss_func)
-        f.write(self.optimizer)
-        f.write(self.scheduler)
+        f.write("Model: " + model+'\n')
+        f.write("Loss Function: " + loss+'\n')
+        f.write("Optimization Function: " + optim+'\n')
+        f.write("Learning Rate Scheduler: " + sched+'\n')
         f.close()
 
     def save_model(self, path_to_save):
@@ -82,20 +85,20 @@ class Model(BaseModel):
                 self.validation_accuracy_list.append(self.compute_accuracy(loader=self.val_loader))
             print('Epoch: %03d/%03d | Train: %0.3f%% | Validation: %3f%%\n' % (
               epoch+1, epochs, self.train_accuracy_list[-1] , self.validation_accuracy_list[-1]))
-        total_time = time.time() - start_time
+        self.total_time = time.time() - start_time
 
     def test(self):
         self.model.eval()
         with torch.set_grad_enabled(False):
-            y_true, y_pred = self.predictions(loader=self.test_loader)
+            self.y_true, self.y_pred = self.predictions(loader=self.test_loader)
     
     
     def results(self, outputFolder):
         f = open(os.path.join(outputFolder, 'output.txt'), "a")
-        f.write(metrics.confusion_matrix(y_true=y_true, y_pred=y_pred, labels=self.labels))
-        f.write(metrics.balanced_accuracy_score(y_true=y_true, y_pred=y_pred))
+        f.write("Confusion Matrix: \n"+str(metrics.confusion_matrix(y_true=self.y_true, y_pred=self.y_pred, labels=self.labels))+'\n')
+        f.write("Balanced Accuracy Score: "+str(metrics.balanced_accuracy_score(y_true=self.y_true, y_pred=self.y_pred))+'\n')
         #f.write(metrics.roc_auc_score(y_true=y_true, y_pred=y_pred, average='weighted'))
-        f.write(metrics.precision_recall_fscore_support(y_true=y_true, y_pred=y_pred, average='macro'))
+        f.write("Precision Recall, FScore, Support: "+str(metrics.precision_recall_fscore_support(y_true=self.y_true, y_pred=self.y_pred, average='macro'))+'\n')
         f.close()
 
 
