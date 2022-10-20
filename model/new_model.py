@@ -5,6 +5,7 @@ import time
 import sklearn.metrics as metrics
 import numpy as np
 import os
+from collections import Counter, OrderedDict
 
 
 class Model(BaseModel):
@@ -23,7 +24,7 @@ class Model(BaseModel):
         self.train_accuracy_list = []
         self.validation_accuracy_list = []
         self.loss_list = []
-        self.labels = [0, 1, 2]
+        self.labels = [c for c in range(num_classes)]
         self.total_time = 0.0
         self.y_true = []
         self.y_pred = []
@@ -42,21 +43,22 @@ class Model(BaseModel):
 
     def train_epoch(self, epoch, total):
         self.model.train()
-        loss = 0.0
+        running_loss = 0.0
         for batch_idx, (features, targets) in enumerate(self.train_loader):
             features = features.to(self.device)
             targets = targets.to(self.device)
 
             logits = self.model(features)
             loss = self.loss_func(logits, targets)
+            running_loss += loss
             self.optimizer.zero_grad()
             loss.backward()
             self.optimizer.step()
-            self.loss_list.append(loss)
 
             if not batch_idx % 5:
                 print('Epoch: %d/%d | Batch: %4d/%4d | Loss: %.4f\n'%(
                     epoch+1, total, batch_idx, len(self.train_loader), loss))
+        return running_loss / len(self.train_loader)
 
     def predictions(self, loader):
         y_pred = []
@@ -77,8 +79,9 @@ class Model(BaseModel):
     def train(self, epochs):
         start_time = time.time()
         for epoch in range(epochs):
-            self.train_epoch(epoch, epochs)
-            self.scheduler.step(metrics=self.loss_list[-1])
+            loss = self.train_epoch(epoch, epochs)
+            self.loss_list.append(loss)
+            self.scheduler.step(metrics=loss)
             self.model.eval()
             with torch.set_grad_enabled(False):
                 self.train_accuracy_list.append(self.compute_accuracy(loader=self.train_loader))
@@ -108,14 +111,24 @@ class Model(BaseModel):
         self.test_loader = torch.utils.data.DataLoader(self.test_set, **kwargs)
 
     def get_weights(self):
-        w = 1 / self.num_classes
-        return torch.tensor([w for _ in range(0, self.num_classes)]).to(self.device) # for now all weights are the same
+        ds_classes = [label for _, label in self.dataset]
+        count = OrderedDict(Counter(ds_classes))
+        i = 0
+        weights_as_list = [(c/len(self.dataset)) for c in count.values()]
+        print("class count:\n{}".format(count))
+        print("weights:\n{}".format(weights_as_list))
+        weights_as_cuda_tensor = torch.tensor(weights_as_list).to(self.device) 
+        return weights_as_cuda_tensor
 
     def set_subset_indices(self, train, validation, test):
         train_len = floor(len(self.dataset) * train)
         test_len = floor(len(self.dataset) * test)
         val_len = floor(len(self.dataset) * validation)
         self.train_set, self.val_set, self.test_set = torch.utils.data.random_split(dataset=self.dataset, lengths=[train_len, val_len, test_len])
+        print("train_set len: {}\nval_set len: {}\ntest_set len: {}".format(
+            len(self.train_set), len(self.val_set), len(self.test_set)
+        ))
+
 
     def set_loss_func(self, loss_str):
         if loss_str == "MSELoss":
@@ -127,6 +140,7 @@ class Model(BaseModel):
             self.loss_func = torch.nn.BCELoss()
         elif loss_str == "BCEL":
             self.loss_func = torch.nn.BCEWithLogitsLoss()
+
 
     def set_optimization_func(self, opt_str, lr):
         if opt_str == "AdaDelta":
@@ -140,10 +154,11 @@ class Model(BaseModel):
         elif opt_str == "AdaGrad":
             self.optimizer = torch.optim.Adagrad(self.model.parameters())
 
+
     def set_lr_sched(self, sched_str, gamma, step_size):
         if sched_str == "ROP":
             self.scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(
-                self.optimizer, factor=0.1, patience=2, verbose=True)
+                self.optimizer, factor=0.1, patience=4, verbose=True)
         elif sched_str == "Step":
             self.scheduler = torch.optim.lr_scheduler.StepLR(self.optimizer, step_size=step_size, 
                                                         gamma=gamma, verbose=False)
