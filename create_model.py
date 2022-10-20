@@ -53,7 +53,8 @@ def main():
     model.test()
     model.results(os.path.join(constants.output_folder, args.output_folder))
 
-    Plots.plot_val_acc_loss(model.loss_list, 
+    Plots.plot_val_acc_loss(False,
+                            model.loss_list, 
                             model.validation_accuracy_list, 
                             os.path.join(constants.output_folder, 
                                             args.output_folder, 
