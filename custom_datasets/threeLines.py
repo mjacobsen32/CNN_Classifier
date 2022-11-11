@@ -1,10 +1,8 @@
 from torch.utils.data import Dataset
-from torchvision.io import read_image
 import os
 import numpy as np
 import pandas as pd
 import PIL
-import matplotlib.pyplot as plt
 
 
 # ------------ Costum Dataset Class ------------

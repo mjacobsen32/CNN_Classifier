@@ -4,8 +4,9 @@ parser = argparse.ArgumentParser(description='ConvNet model creation arguments')
 
 parser.add_argument(
     '-out', '--output_folder',
-    required=True,
+    required=False,
     type=str,
+    default='test',
     help="String of output folder to save all information of model train and test"
 )
 
@@ -44,7 +45,7 @@ parser.add_argument(
     '-lr', '--learning_rate',
     required=False,
     type=int,
-    default=0.001,
+    default=0.1,
     help="Learning rate")
 
 parser.add_argument(
@@ -73,7 +74,7 @@ parser.add_argument(
     '-e', '--epochs',
     required=False,
     type=int,
-    default=40,
+    default=2,
     help="Number of training epochs. Default = 40")
 
 parser.add_argument(
@@ -81,7 +82,7 @@ parser.add_argument(
     choices=("AlexNet", "GoogLeNet", "ResNet18"),
     required=False,
     type=str,
-    default="GoogLeNet",
+    default="AlexNet",
     help="Model architecture. Options: ('AlexNet', 'GoogLeNet', 'ResNet50'). Default = 'GoogLeNet")
 
 parser.add_argument(
@@ -97,4 +98,12 @@ parser.add_argument(
     type=bool,
     default=False,
     help="Save-model as state dict (bool)"
+)
+
+parser.add_argument(
+    '--debug',
+    required=False,
+    type=bool,
+    default=False,
+    help="Debug mode <True> or <False>"
 )

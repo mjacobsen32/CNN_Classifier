@@ -1,10 +1,11 @@
 import torch
 import torchvision.models as models
+from model.timeFunctions import timer_wrapper
 
 class BaseModel:
+    @timer_wrapper
     def __init__(self, device_str, model_name, num_classes, ds):
         use_cuda = (torch.cuda.is_available() and device_str == 'cuda')
-        print("use_cuda: {}".format(use_cuda))
         self.device = torch.device("cuda" if use_cuda else "cpu") # Either 'Cuda' or 'CPU' (GPU or CPU usage)
         self.model = self.get_model(model_name, num_classes) # Creating model: To be loaded from model dict
                                                     # or created from scratch with seed 
@@ -12,7 +13,7 @@ class BaseModel:
         self.dataset = ds                            # custom dataset to use
         self.num_classes = num_classes
 
-
+    @timer_wrapper
     def get_model(self, model_name, num_classes):
         if model_name == "AlexNet":
             return models.alexnet(num_classes=num_classes).to(self.device)

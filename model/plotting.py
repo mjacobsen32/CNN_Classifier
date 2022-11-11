@@ -1,4 +1,3 @@
-from cProfile import label
 from matplotlib import pyplot as plt
 
 class Plots:
