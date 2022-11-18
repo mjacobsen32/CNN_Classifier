@@ -27,7 +27,7 @@ parser.add_argument(
 
 parser.add_argument(
     '-o', '--optim',
-    choices=("Adam"),
+    choices=("Adam","AdaDelta", "SGD", "RProp", "AdaGrad"),
     required=False,
     type=str,
     default="Adam",
@@ -35,7 +35,7 @@ parser.add_argument(
 
 parser.add_argument(
     '-l', '--loss',
-    choices=("CEL"),
+    choices=("CEL", "MSELoss", "BCE", "BCEL"),
     required=False,
     type=str,
     default="CEL",
@@ -44,8 +44,8 @@ parser.add_argument(
 parser.add_argument(
     '-lr', '--learning_rate',
     required=False,
-    type=int,
-    default=0.1,
+    type=float,
+    default=0.01,
     help="Learning rate")
 
 parser.add_argument(
@@ -60,21 +60,24 @@ parser.add_argument(
     '-ss', '--step_size',
     required=False,
     type=int,
-    default=10,
-    help="Epoch at which to adjust learning rate by gamma. Only used if StepLR is used as the learning rate scheduler. Default = 10")
+    default=1,
+    help="""With StepLR scheduler this is equal to the number of epochs before multiplying lr by gamma.\n
+    with ROP this is equal to the patience before adjusting learning rate by factor (gamma).\n
+    Default = 10""")
 
 parser.add_argument(
     '-g', '--gamma',
     required=False,
     type=float,
     default=0.1,
-    help="Gamma to adjust learning rate at each step size interval. Only used if StepLR is selected as Learning Rate. Default = 0.1")
+    help="""Gamma to adjust learning rate at each step size interval. 
+    Only used if StepLR is selected as Learning Rate. Default = 0.1""")
 
 parser.add_argument(
     '-e', '--epochs',
     required=False,
     type=int,
-    default=2,
+    default=40,
     help="Number of training epochs. Default = 40")
 
 parser.add_argument(
@@ -98,12 +101,4 @@ parser.add_argument(
     type=bool,
     default=False,
     help="Save-model as state dict (bool)"
-)
-
-parser.add_argument(
-    '--debug',
-    required=False,
-    type=bool,
-    default=False,
-    help="Debug mode <True> or <False>"
 )

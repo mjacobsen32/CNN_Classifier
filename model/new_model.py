@@ -6,11 +6,11 @@ import sklearn.metrics as metrics
 from model.timeFunctions import timer_wrapper
 import os
 from collections import Counter, OrderedDict
+from model.logger import modelLog
 
 
 class Model(BaseModel):
     
-    @timer_wrapper
     def __init__(self, device_str, model_name, num_classes, ds):
         BaseModel.__init__(self, device_str, model_name, num_classes, ds)
         self.weights = []
@@ -31,11 +31,9 @@ class Model(BaseModel):
         self.y_true = []
         self.y_pred = []
 
-    @timer_wrapper
     def save_model(self, path_to_save):
         torch.save(self.model.state_dict(), os.path.join(path_to_save,'model.pth'))
 
-    @timer_wrapper
     def train_epoch(self, epoch, total):
         self.model.train()
         running_loss = 0.0
@@ -51,11 +49,10 @@ class Model(BaseModel):
             self.optimizer.step()
 
             if not batch_idx % 5:
-                print('Epoch: %d/%d | Batch: %4d/%4d | Loss: %.4f\n'%(
+                modelLog.debug('Epoch: %d/%d | Batch: %4d/%4d | Loss: %.4f'%(
                     epoch+1, total, batch_idx, len(self.train_loader), loss))
         return running_loss / len(self.train_loader)
 
-    @timer_wrapper
     def predictions(self, loader):
         y_pred = []
         y_true = []
@@ -66,7 +63,6 @@ class Model(BaseModel):
             y_true += torch.Tensor.cpu(targets).tolist()
         return y_true, y_pred
     
-    @timer_wrapper
     def compute_accuracy(self, loader):
         y_true, y_pred = self.predictions(loader=loader)
         return metrics.balanced_accuracy_score(y_true=y_true, y_pred=y_pred)
@@ -77,13 +73,14 @@ class Model(BaseModel):
         for epoch in range(epochs):
             loss = self.train_epoch(epoch, epochs)
             self.loss_list.append(loss)
-            self.scheduler.step(metrics=loss)
+            self.scheduler.step()
             self.model.eval()
             with torch.set_grad_enabled(False):
                 self.train_accuracy_list.append(self.compute_accuracy(loader=self.train_loader))
                 self.validation_accuracy_list.append(self.compute_accuracy(loader=self.val_loader))
-            print('Epoch: %03d/%03d | Train: %0.3f%% | Validation: %3f%%\n' % (
-              epoch+1, epochs, self.train_accuracy_list[-1] , self.validation_accuracy_list[-1]))
+            modelLog.info('Epoch: %03d/%03d | Train: %0.3f%% | Validation: %3f%% | Loss: %3f%%' % (
+              epoch+1, epochs, self.train_accuracy_list[-1], 
+              self.validation_accuracy_list[-1], self.loss_list[-1]))
         self.total_time = time.time() - start_time
 
     @timer_wrapper
@@ -92,42 +89,35 @@ class Model(BaseModel):
         with torch.set_grad_enabled(False):
             self.y_true, self.y_pred = self.predictions(loader=self.test_loader)
     
-    @timer_wrapper
     def results(self, outputFolder):
-        matrix = ("Confusion Matrix: \n"+str(metrics.confusion_matrix(y_true=self.y_true, y_pred=self.y_pred, labels=self.labels))+'\n')
-        accuracy = ("Balanced Accuracy Score: "+str(metrics.balanced_accuracy_score(y_true=self.y_true, y_pred=self.y_pred))+'\n')
+        modelLog.info("Confusion Matrix: \n"+str(metrics.confusion_matrix(y_true=self.y_true, y_pred=self.y_pred, labels=self.labels))+'\n')
+        modelLog.info("Balanced Accuracy Score: "+str(metrics.balanced_accuracy_score(y_true=self.y_true, y_pred=self.y_pred))+'\n')
         #f.write(metrics.roc_auc_score(y_true=y_true, y_pred=y_pred, average='weighted'))
-        p_r_f_s = ("Precision Recall, FScore, Support: "+str(metrics.precision_recall_fscore_support(y_true=self.y_true, y_pred=self.y_pred, average='macro'))+'\n')
-        return matrix, accuracy, p_r_f_s
+        modelLog.info("Precision Recall, FScore, Support: "+str(metrics.precision_recall_fscore_support(y_true=self.y_true, y_pred=self.y_pred, average='macro'))+'\n')
 
-    @timer_wrapper
     def set_subsets(self, kwargs):
         self.train_loader = torch.utils.data.DataLoader(self.train_set, **kwargs)
         self.val_loader = torch.utils.data.DataLoader(self.val_set, **kwargs)
         self.test_loader = torch.utils.data.DataLoader(self.test_set, **kwargs)
 
-    @timer_wrapper
     def get_weights(self):
         ds_classes = [label for _, label in self.dataset]
         count = OrderedDict(Counter(ds_classes))
-        i = 0
         weights_as_list = [(c/len(self.dataset)) for c in count.values()]
-        print("class count:\n{}".format(count))
-        print("weights:\n{}".format(weights_as_list))
+        modelLog.info("class count:\n{}".format(count))
+        modelLog.info("weights:\n{}".format(weights_as_list))
         weights_as_cuda_tensor = torch.tensor(weights_as_list).to(self.device) 
         return weights_as_cuda_tensor
 
-    @timer_wrapper
     def set_subset_indices(self, train, validation, test):
         train_len = floor(len(self.dataset) * train)
         test_len = floor(len(self.dataset) * test)
         val_len = floor(len(self.dataset) * validation)
-        self.train_set, self.val_set, self.test_set = torch.utils.data.random_split(dataset=self.dataset, lengths=[train_len, val_len, test_len])
-        print("train_set len: {}\nval_set len: {}\ntest_set len: {}".format(
+        self.train_set, self.val_set, self.test_set = torch.utils.data.random_split(dataset=self.dataset, lengths=[train_len, val_len, test_len])                              
+        modelLog.info("train_set len: {}\nval_set len: {}\ntest_set len: {}".format(
             len(self.train_set), len(self.val_set), len(self.test_set)
         ))
 
-    @timer_wrapper
     def set_loss_func(self, loss_str):
         if loss_str == "MSELoss":
             self.loss_func = torch.nn.MSELoss()
@@ -139,7 +129,6 @@ class Model(BaseModel):
         elif loss_str == "BCEL":
             self.loss_func = torch.nn.BCEWithLogitsLoss()
 
-    @timer_wrapper
     def set_optimization_func(self, opt_str, lr):
         if opt_str == "AdaDelta":
             self.optimizer = torch.optim.Adadelta(self.model.parameters())
@@ -152,11 +141,10 @@ class Model(BaseModel):
         elif opt_str == "AdaGrad":
             self.optimizer = torch.optim.Adagrad(self.model.parameters())
 
-    @timer_wrapper
     def set_lr_sched(self, sched_str, gamma, step_size):
         if sched_str == "ROP":
             self.scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(
-                self.optimizer, factor=0.1, patience=4, verbose=True)
+                self.optimizer, factor=gamma, patience=step_size, verbose=True)
         elif sched_str == "Step":
             self.scheduler = torch.optim.lr_scheduler.StepLR(self.optimizer, step_size=step_size, 
                                                         gamma=gamma, verbose=False)

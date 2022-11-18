@@ -1,16 +1,7 @@
 import time
 import logging
 import constants.scatterPlotConstants as constants
-
-LEVEL = constants.LEVEL
-LOG_FILE = constants.LOG_FILE
-
-timeLog = logging.getLogger(' timer:')
-timeLog.setLevel(LEVEL)
-formatter = logging.Formatter('%(levelname)s:%(name)s:%(message)s')
-file_handler = logging.FileHandler(LOG_FILE)
-file_handler.setFormatter(formatter)
-timeLog.addHandler(file_handler)
+from model.logger import modelLog as timeLog
 
 def timer_wrapper(func):
     total_time = 0
