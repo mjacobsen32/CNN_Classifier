@@ -1,6 +1,7 @@
 import torch
 import torchvision.models as models
 from model.timeFunctions import timer_wrapper
+from model.nets.branchAlexNet import BranchedAlexNet
 
 class BaseModel:
     def __init__(self, device_str, model_name, num_classes, ds):
@@ -21,4 +22,7 @@ class BaseModel:
             return models.resnet18(num_classes=num_classes).to(self.device)
         elif model_name == 'VGG13':
             return models.vgg13(num_classes=num_classes).to(self.device)
+        elif model_name == 'BranchedAlexNet':
+            return BranchedAlexNet(num_classes=num_classes).to(self.device)
+            
         return "ERROR_LOADING_MODEL"
